@@ -1,12 +1,15 @@
--- Drop tables if they exist
-DROP TABLE IF EXISTS order_product;
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS product;
-DROP TABLE IF EXISTS customer;
-DROP TABLE IF EXISTS address;
+-- Create the schema if it does not exist
+CREATE SCHEMA IF NOT EXISTS demo;
 
--- CREATE TABLE Address table if it does not exist
-CREATE TABLE address (
+-- Drop tables if they exist in the demo schema
+DROP TABLE IF EXISTS demo.orders_products;
+DROP TABLE IF EXISTS demo.orders;
+DROP TABLE IF EXISTS demo.products;
+DROP TABLE IF EXISTS demo.customers;
+DROP TABLE IF EXISTS demo.addresses;
+
+-- Create the Address table in the demo schema
+CREATE TABLE demo.addresses (
     id SERIAL PRIMARY KEY,
     street VARCHAR(255),
     city VARCHAR(255),
@@ -14,34 +17,34 @@ CREATE TABLE address (
     zip_code VARCHAR(20)
 );
 
--- CREATE TABLE Customer table if it does not exist
-CREATE TABLE customer (
+-- Create the Customer table in the demo schema
+CREATE TABLE demo.customers (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     address_id INT,
-    FOREIGN KEY (address_id) REFERENCES address(id)
+    FOREIGN KEY (address_id) REFERENCES demo.addresses(id)
 );
 
--- CREATE TABLE Order table if it does not exist
-CREATE TABLE orders (
+-- Create the Order table in the demo schema
+CREATE TABLE demo.orders (
     id SERIAL PRIMARY KEY,
     order_number VARCHAR(255) NOT NULL,
     customer_id INT NOT NULL,
-    FOREIGN KEY (customer_id) REFERENCES customer(id)
+    FOREIGN KEY (customer_id) REFERENCES demo.customers(id)
 );
 
--- CREATE TABLE Product table if it does not exist
-CREATE TABLE product (
+-- Create the Product table in the demo schema
+CREATE TABLE demo.products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     price NUMERIC(10, 2) NOT NULL
 );
 
--- CREATE TABLE Order_Product join table if it does not exist
-CREATE TABLE order_product (
+-- Create the Order_Product join table in the demo schema
+CREATE TABLE demo.orders_products (
     order_id INT NOT NULL,
     product_id INT NOT NULL,
     PRIMARY KEY (order_id, product_id),
-    FOREIGN KEY (order_id) REFERENCES orders(id),
-    FOREIGN KEY (product_id) REFERENCES product(id)
+    FOREIGN KEY (order_id) REFERENCES demo.orders(id),
+    FOREIGN KEY (product_id) REFERENCES demo.products(id)
 );
