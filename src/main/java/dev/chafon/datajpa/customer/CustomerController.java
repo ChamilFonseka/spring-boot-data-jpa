@@ -42,7 +42,7 @@ class CustomerController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateCustomer(Integer id, CustomerDto customerDto) {
         customerService.updateCustomer(id, customerDto);
     }
