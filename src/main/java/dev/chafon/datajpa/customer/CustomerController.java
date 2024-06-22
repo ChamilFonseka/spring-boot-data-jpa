@@ -18,9 +18,7 @@ class CustomerController {
 
     @GetMapping
     public List<Customer> getCustomers() {
-        List<Customer> customers = customerService.getCustomers();
-        System.out.println(customers);
-        return customers;
+        return customerService.getCustomers();
     }
 
     @GetMapping("/{id}")
@@ -30,7 +28,7 @@ class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Customer> createCustomer(CustomerDto customerDto) {
+    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerDto customerDto) {
         Customer customer = customerService.createCustomer(customerDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -41,20 +39,15 @@ class CustomerController {
         return ResponseEntity.created(location).body(customer);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateCustomer(Integer id, CustomerDto customerDto) {
+    public void updateCustomer(@PathVariable Integer id, @RequestBody CustomerDto customerDto) {
         customerService.updateCustomer(id, customerDto);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCustomer(Integer id) {
+    public void deleteCustomer(@PathVariable Integer id) {
         customerService.deleteCustomer(id);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> handleCustomerNotFoundException(CustomerNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 }
