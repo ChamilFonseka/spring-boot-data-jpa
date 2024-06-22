@@ -1,5 +1,6 @@
 package dev.chafon.datajpa.customer;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -7,13 +8,11 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
     public List<Customer> getCustomers() {
         return customerRepository.findAll();
     }

@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.fail;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CustomerControllerTest {
 
-    public static final String BASE_URL = "/api/v1/customers";
+    private static final String BASE_URL = "/api/v1/customers";
 
     private final Customer john = Customer.builder()
             .name("John Doe")
@@ -122,15 +122,17 @@ class CustomerControllerTest {
                 new HttpEntity<>(customerToUpdate), Void.class, tom.getId());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
-        customerRepository.findById(tom.getId()).ifPresentOrElse(
-                updatedCustomer -> {
-                    assertThat(updatedCustomer.getName()).isEqualTo(customerToUpdate.name());
-                    assertThat(updatedCustomer.getAddress().getCity()).isEqualTo(customerToUpdate.city());
-                    assertThat(updatedCustomer.getAddress().getState()).isEqualTo(customerToUpdate.state());
-                    assertThat(updatedCustomer.getAddress().getStreet()).isEqualTo(customerToUpdate.street());
-                    assertThat(updatedCustomer.getAddress().getZipCode()).isEqualTo(customerToUpdate.zipCode());
-                },
-                () -> fail("Customer not found"));
+        customerRepository.findById(tom.getId())
+                .ifPresentOrElse(
+                        updatedCustomer -> {
+                            assertThat(updatedCustomer.getName()).isEqualTo(customerToUpdate.name());
+                            assertThat(updatedCustomer.getAddress().getCity()).isEqualTo(customerToUpdate.city());
+                            assertThat(updatedCustomer.getAddress().getState()).isEqualTo(customerToUpdate.state());
+                            assertThat(updatedCustomer.getAddress().getStreet()).isEqualTo(customerToUpdate.street());
+                            assertThat(updatedCustomer.getAddress().getZipCode()).isEqualTo(customerToUpdate.zipCode());
+                        },
+                        () -> fail("Customer not found")
+                );
     }
 
     @Test
@@ -149,7 +151,6 @@ class CustomerControllerTest {
                 null, Void.class, tom.getId());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-
         assertThat(customerRepository.findById(tom.getId())).isEmpty();
     }
 }
