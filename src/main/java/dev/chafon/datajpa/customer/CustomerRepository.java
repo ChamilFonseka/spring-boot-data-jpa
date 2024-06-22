@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-interface CustomerRepository extends JpaRepository<Customer, Integer> {
+public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     @Query("select c from Customer c join fetch c.address")
     List<Customer> findAllWithAddresses();
