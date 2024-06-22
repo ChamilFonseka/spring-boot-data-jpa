@@ -17,10 +17,6 @@ class ApplicationTests {
 
 	@Test
 	void contextLoads() {
-	}
-
-	@Test
-	void testPostgresStatus() {
 		assertThat(postgreSQLContainer.isCreated()).isTrue();
 		assertThat((postgreSQLContainer.isRunning())).isTrue();
 	}
