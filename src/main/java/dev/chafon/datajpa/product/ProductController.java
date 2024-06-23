@@ -3,6 +3,7 @@ package dev.chafon.datajpa.product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -50,5 +51,10 @@ class ProductController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable int id) {
         productService.deleteProduct(id);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ErrorResponse handleProductNotFoundException(ProductNotFoundException ex) {
+        return ErrorResponse.builder(ex, HttpStatus.NOT_FOUND, ex.getMessage()).build();
     }
 }

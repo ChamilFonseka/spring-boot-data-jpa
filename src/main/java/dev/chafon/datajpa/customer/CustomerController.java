@@ -3,6 +3,7 @@ package dev.chafon.datajpa.customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -49,5 +50,10 @@ class CustomerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomer(@PathVariable Integer id) {
         customerService.deleteCustomer(id);
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ErrorResponse handleCustomerNotFoundException(CustomerNotFoundException ex) {
+        return ErrorResponse.builder(ex, HttpStatus.NOT_FOUND, ex.getMessage()).build();
     }
 }
