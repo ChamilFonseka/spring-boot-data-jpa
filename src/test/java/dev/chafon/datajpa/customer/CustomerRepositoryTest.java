@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CustomerRepositoryTest {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private TestCustomerRepository customerRepository;
 
     @BeforeEach
     void setUp() {

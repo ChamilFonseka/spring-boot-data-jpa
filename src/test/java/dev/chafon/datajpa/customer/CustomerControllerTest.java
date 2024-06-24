@@ -60,7 +60,7 @@ class CustomerControllerTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private TestCustomerRepository customerRepository;
 
     @BeforeEach
     void setUp() {
