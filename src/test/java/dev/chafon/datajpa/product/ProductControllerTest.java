@@ -46,7 +46,7 @@ class ProductControllerTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private ProductRepository productRepository;
+    private TestProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
