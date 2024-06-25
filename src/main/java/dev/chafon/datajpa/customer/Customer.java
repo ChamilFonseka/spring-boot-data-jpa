@@ -1,10 +1,10 @@
 package dev.chafon.datajpa.customer;
 
+import dev.chafon.datajpa.order.Order;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "customers")
-class Customer {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,6 +20,10 @@ class Customer {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private CustomerAddress address;
+    @OneToMany(mappedBy = "customer")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Order> orders;
 
     static Customer of(CustomerDto customerDto) {
         return Customer.builder()
@@ -33,7 +37,7 @@ class Customer {
                 .build();
     }
 
-    public void mapTo(CustomerDto customerDto) {
+    void mapTo(CustomerDto customerDto) {
         this.name = customerDto.name();
         this.address.setCity(customerDto.city());
         this.address.setState(customerDto.state());

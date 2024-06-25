@@ -13,20 +13,20 @@ class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    public List<Customer> getCustomers() {
+    List<Customer> getCustomers() {
         return customerRepository.findAll();
     }
 
-    public Customer getCustomer(Integer id) {
+    Customer getCustomer(Integer id) {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
-    public Customer createCustomer(CustomerDto customerDto) {
+    Customer createCustomer(CustomerDto customerDto) {
         return customerRepository.save(Customer.of(customerDto));
     }
 
-    public void updateCustomer(Integer id, CustomerDto customerDto) {
+    void updateCustomer(Integer id, CustomerDto customerDto) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(id));
 
@@ -34,7 +34,7 @@ class CustomerService {
         customerRepository.save(customer);
     }
 
-    public void deleteCustomer(Integer id) {
+    void deleteCustomer(Integer id) {
         customerRepository.deleteById(id);
     }
 }

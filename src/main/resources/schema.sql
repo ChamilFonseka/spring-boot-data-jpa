@@ -29,6 +29,7 @@ CREATE TABLE demo.customers (
 CREATE TABLE demo.orders (
     id SERIAL PRIMARY KEY,
     order_number VARCHAR(255) NOT NULL,
+    order_created_time TIMESTAMP NOT NULL,
     customer_id INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES demo.customers(id)
 );
