@@ -1,10 +1,11 @@
 package dev.chafon.datajpa.customer;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import dev.chafon.datajpa.order.Order;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -23,7 +24,8 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Order> orders;
+    @JsonManagedReference
+    private Set<Order> orders;
 
     static Customer of(CustomerDto customerDto) {
         return Customer.builder()
