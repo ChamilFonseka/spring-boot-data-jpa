@@ -1,14 +1,11 @@
 package dev.chafon.datajpa.order;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import dev.chafon.datajpa.customer.Customer;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 
 @Data
 @Builder
@@ -23,5 +20,9 @@ public class Order {
     private String orderNumber;
     private LocalDateTime orderCreatedTime;
     @ManyToOne
+    @JoinColumn(name = "customer_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonBackReference
     private Customer customer;
 }
