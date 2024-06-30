@@ -21,7 +21,7 @@ CREATE TABLE demo.addresses (
     city VARCHAR(255),
     state VARCHAR(255),
     zip_code VARCHAR(20),
-    customer_id INT,
+    customer_id INT UNIQUE,
     FOREIGN KEY (customer_id) REFERENCES demo.customers(id)
 );
 

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 class ProductService {
 
-    private final ProductRepository productRepository;
+    //private final ProductRepository productRepository;
 }
