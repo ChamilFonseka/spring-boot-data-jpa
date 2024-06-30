@@ -27,7 +27,7 @@ public class Customer {
     @JsonManagedReference
     private Set<Order> orders;
 
-    static Customer of(CustomerDto customerDto) {
+    public static Customer of(CustomerDto customerDto) {
         return Customer.builder()
                 .name(customerDto.name())
                 .address(CustomerAddress.builder()
@@ -39,7 +39,7 @@ public class Customer {
                 .build();
     }
 
-    void mapTo(CustomerDto customerDto) {
+    public void mapTo(CustomerDto customerDto) {
         this.name = customerDto.name();
         this.address.setCity(customerDto.city());
         this.address.setState(customerDto.state());
