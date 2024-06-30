@@ -1,6 +1,7 @@
 package dev.chafon.datajpa.customer;
 
-record CustomerDto(
+public record CustomerDto(
+        Integer id,
         String name,
         String street,
         String city,
