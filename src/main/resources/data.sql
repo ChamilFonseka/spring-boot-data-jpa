@@ -1,10 +1,10 @@
--- Insert sample data into Address table
-INSERT INTO demo.addresses (street, city, state, zip_code) VALUES ('123 Main St', 'Anytown', 'Anystate', '12345');
-INSERT INTO demo.addresses (street, city, state, zip_code) VALUES ('456 Elm St', 'Othertown', 'Otherstate', '67890');
-
 -- Insert sample data into Customer table
-INSERT INTO demo.customers (name, address_id) VALUES ('John Doe', 1);
-INSERT INTO demo.customers (name, address_id) VALUES ('Jane Smith', 2);
+INSERT INTO demo.customers (name) VALUES ('John Doe');
+INSERT INTO demo.customers (name) VALUES ('Jane Smith');
+
+-- Insert sample data into Address table
+INSERT INTO demo.addresses (street, city, state, zip_code, customer_id) VALUES ('123 Main St', 'Anytown', 'Anystate', '12345', 1);
+INSERT INTO demo.addresses (street, city, state, zip_code, customer_id) VALUES ('456 Elm St', 'Othertown', 'Otherstate', '67890', 2);
 
 -- Insert sample data into Product table
 INSERT INTO demo.products (name, price) VALUES ('Product A', 9.99);
