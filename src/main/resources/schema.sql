@@ -5,8 +5,14 @@ CREATE SCHEMA IF NOT EXISTS demo;
 DROP TABLE IF EXISTS demo.orders_products;
 DROP TABLE IF EXISTS demo.orders;
 DROP TABLE IF EXISTS demo.products;
-DROP TABLE IF EXISTS demo.customers;
 DROP TABLE IF EXISTS demo.addresses;
+DROP TABLE IF EXISTS demo.customers;
+
+-- Create the Customer table in the demo schema
+CREATE TABLE demo.customers (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
 
 -- Create the Address table in the demo schema
 CREATE TABLE demo.addresses (
@@ -14,15 +20,9 @@ CREATE TABLE demo.addresses (
     street VARCHAR(255),
     city VARCHAR(255),
     state VARCHAR(255),
-    zip_code VARCHAR(20)
-);
-
--- Create the Customer table in the demo schema
-CREATE TABLE demo.customers (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    address_id INT,
-    FOREIGN KEY (address_id) REFERENCES demo.addresses(id)
+    zip_code VARCHAR(20),
+    customer_id INT,
+    FOREIGN KEY (customer_id) REFERENCES demo.customers(id)
 );
 
 -- Create the Order table in the demo schema
