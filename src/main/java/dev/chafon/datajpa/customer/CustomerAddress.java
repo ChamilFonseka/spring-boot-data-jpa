@@ -1,10 +1,7 @@
 package dev.chafon.datajpa.customer;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
@@ -22,5 +19,7 @@ public class CustomerAddress {
     private String zipCode;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id", unique = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Customer customer;
 }
