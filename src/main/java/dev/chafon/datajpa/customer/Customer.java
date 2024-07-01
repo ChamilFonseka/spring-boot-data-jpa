@@ -19,6 +19,8 @@ public class Customer {
     private Integer id;
     private String name;
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private CustomerAddress address;
 //    @OneToMany(mappedBy = "customer")
 //    @ToString.Exclude

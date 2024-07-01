@@ -3,6 +3,8 @@ package dev.chafon.datajpa.customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 class CustomerService {
@@ -10,10 +12,8 @@ class CustomerService {
     private final CustomerRepository customerRepository;
 
     public CustomerDto getCustomer(int id) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() ->
-                        new CustomerNotFoundException(id));
-
-        return CustomerDto.from(customer);
+        Optional<CustomerDto> customerDto = customerRepository.findById(id);
+        return customerDto.orElseThrow(() ->
+                new CustomerNotFoundException(id));
     }
 }
