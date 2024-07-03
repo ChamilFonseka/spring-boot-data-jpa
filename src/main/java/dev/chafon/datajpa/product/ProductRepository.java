@@ -1,4 +1,3 @@
 package dev.chafon.datajpa.product;
 
-interface ProductRepository {
-}
+interface ProductRepository {}

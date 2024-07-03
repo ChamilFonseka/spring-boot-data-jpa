@@ -1,12 +1,11 @@
 package dev.chafon.datajpa.product;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Data
 @Builder
@@ -15,21 +14,19 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "products")
 class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
-    private BigDecimal price;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    static Product of(ProductDto productDto) {
-        return Product.builder()
-                .name(productDto.name())
-                .price(productDto.price())
-                .build();
-    }
+  private String name;
+  private BigDecimal price;
 
-    void mapTo(ProductDto productDto) {
-        this.name = productDto.name();
-        this.price = productDto.price();
-    }
+  static Product of(ProductDto productDto) {
+    return Product.builder().name(productDto.name()).price(productDto.price()).build();
+  }
+
+  void mapTo(ProductDto productDto) {
+    this.name = productDto.name();
+    this.price = productDto.price();
+  }
 }

@@ -1,4 +1,3 @@
 package dev.chafon.datajpa.order;
 
-record OrderDto() {
-}
+record OrderDto() {}
