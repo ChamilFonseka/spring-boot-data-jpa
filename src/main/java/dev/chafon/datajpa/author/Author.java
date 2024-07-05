@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import java.util.Set;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -15,7 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @SuperBuilder
 @Entity
 @Table(name = "authors")
-@EntityListeners(AuditingEntityListener.class)
 public class Author extends BaseEntity {
 
   @Column(nullable = false)

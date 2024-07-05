@@ -5,7 +5,6 @@ import dev.chafon.datajpa.lecture.Lecture;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -13,9 +12,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name = "resources")
-@EntityListeners(AuditingEntityListener.class)
-public class Resource extends BaseEntity {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Resource extends BaseEntity {
 
   @Column(nullable = false)
   private String name;

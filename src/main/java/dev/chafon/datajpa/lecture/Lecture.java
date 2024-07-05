@@ -6,7 +6,6 @@ import dev.chafon.datajpa.section.Section;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -15,7 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @SuperBuilder
 @Entity
 @Table(name = "lectures")
-@EntityListeners(AuditingEntityListener.class)
 public class Lecture extends BaseEntity {
 
   @Column(nullable = false)
