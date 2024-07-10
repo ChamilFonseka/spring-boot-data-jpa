@@ -2,14 +2,10 @@ package dev.chafon.datajpa.pet;
 
 import dev.chafon.datajpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
