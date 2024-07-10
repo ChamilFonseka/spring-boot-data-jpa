@@ -2,6 +2,7 @@ package dev.chafon.datajpa.pet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import dev.chafon.datajpa.TestContainersConfiguration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -12,7 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
+@Import(TestContainersConfiguration.class)
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PetServiceTest {

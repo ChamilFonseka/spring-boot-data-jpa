@@ -6,7 +6,7 @@ public class TestSpringBootDataJpaApplication {
 
   public static void main(String[] args) {
     SpringApplication.from(SpringBootDataJpaApplication::main)
-        .with(TestcontainersConfiguration.class)
+        .with(TestContainersConfiguration.class)
         .run(args);
   }
 }

@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-@Import(TestcontainersConfiguration.class)
+@Import(TestContainersConfiguration.class)
 @SpringBootTest
 class SpringBootDataJpaApplicationTests {
 
