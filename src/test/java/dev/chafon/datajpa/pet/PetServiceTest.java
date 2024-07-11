@@ -57,6 +57,7 @@ class PetServiceTest {
     assertThat(fetchedCat.sound()).isNull();
     assertThat(fetchedCat.size()).isNull();
     assertThat(fetchedCat.coatLength()).isNull();
+    assertThat(fetchedCat.type()).isEqualTo(PetType.CAT);
 
     Optional<PetDto> optionalDog =
         allPets.stream().filter(pet -> Objects.equals(pet.id(), savedDog.getId())).findAny();
@@ -70,6 +71,7 @@ class PetServiceTest {
     assertThat(fetchedDog.size()).isEqualTo(savedDog.getSize());
     assertThat(fetchedDog.coatLength()).isEqualTo(savedDog.getCoatLength());
     assertThat(fetchedDog.registry()).isNull();
+    assertThat(fetchedDog.type()).isEqualTo(PetType.DOG);
   }
 
   @Test
@@ -84,6 +86,7 @@ class PetServiceTest {
     assertThat(fetchedCat.sound()).isNull();
     assertThat(fetchedCat.size()).isNull();
     assertThat(fetchedCat.coatLength()).isNull();
+    assertThat(fetchedCat.type()).isEqualTo(PetType.CAT);
   }
 
   @Test
@@ -98,13 +101,14 @@ class PetServiceTest {
     assertThat(fetchedDog.size()).isEqualTo(savedDog.getSize());
     assertThat(fetchedDog.coatLength()).isEqualTo(savedDog.getCoatLength());
     assertThat(fetchedDog.registry()).isNull();
+    assertThat(fetchedDog.type()).isEqualTo(PetType.DOG);
   }
 
   @Test
   void shouldSaveACat() {
     PetDto catTobeSaved = generateFakeCatDto();
 
-    Long id = petService.createPet(PetType.CAT, catTobeSaved);
+    Long id = petService.createPet(catTobeSaved);
     assertThat(id).isNotNull();
 
     Optional<Pet> petOptional = petRepository.findById(id);
@@ -115,13 +119,14 @@ class PetServiceTest {
     assertThat(catFromDb.getAge()).isEqualTo(catTobeSaved.age());
     assertThat(catFromDb.getBreed()).isEqualTo(catTobeSaved.breed());
     assertThat(catFromDb.getRegistry()).isEqualTo(catTobeSaved.registry());
+    assertThat(catFromDb.getType()).isEqualTo(PetType.CAT);
   }
 
   @Test
   void shouldSaveADog() {
     PetDto dogTobeSaved = generateFakeDogDto();
 
-    Long id = petService.createPet(PetType.DOG, dogTobeSaved);
+    Long id = petService.createPet(dogTobeSaved);
     assertThat(id).isNotNull();
 
     Optional<Pet> petOptional = petRepository.findById(id);
@@ -134,6 +139,7 @@ class PetServiceTest {
     assertThat(dogFromDb.getSound()).isEqualTo(dogTobeSaved.sound());
     assertThat(dogFromDb.getSize()).isEqualTo(dogTobeSaved.size());
     assertThat(dogFromDb.getCoatLength()).isEqualTo(dogTobeSaved.coatLength());
+    assertThat(dogFromDb.getType()).isEqualTo(PetType.DOG);
   }
 
   private PetDto generateFakeDogDto() {
@@ -156,6 +162,7 @@ class PetServiceTest {
         .sound(fakeDog.sound())
         .size(fakeDog.size())
         .coatLength(fakeDog.coatLength())
+        .type(PetType.DOG)
         .build();
   }
 
@@ -172,6 +179,7 @@ class PetServiceTest {
         .age(faker.number().numberBetween(1, 10))
         .breed(fakeCat.breed())
         .registry(fakeCat.registry())
+        .type(PetType.CAT)
         .build();
   }
 }

@@ -21,4 +21,8 @@ public abstract class Pet extends BaseEntity {
 
   @Column(nullable = false)
   private String breed;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private PetType type;
 }

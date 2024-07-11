@@ -30,6 +30,7 @@ public class Dog extends Pet {
         .sound(petDto.sound())
         .size(petDto.size())
         .coatLength(petDto.coatLength())
+        .type(PetType.DOG)
         .build();
   }
 }

@@ -22,6 +22,7 @@ public class Cat extends Pet {
         .age(petDto.age())
         .breed(petDto.breed())
         .registry(petDto.registry())
+        .type(PetType.CAT)
         .build();
   }
 }

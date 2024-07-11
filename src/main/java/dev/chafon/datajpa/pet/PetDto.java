@@ -8,14 +8,15 @@ public record PetDto(
     String registry,
     String sound,
     String size,
-    String coatLength) {
+    String coatLength,
+    PetType type) {
 
   public static PetDto aCat(String name, int age, String breed, String registry) {
-    return new PetDto(null, name, age, breed, registry, null, null, null);
+    return new PetDto(null, name, age, breed, registry, null, null, null, PetType.CAT);
   }
 
   public static PetDto aDog(
       String name, int age, String breed, String sound, String size, String coatLength) {
-    return new PetDto(null, name, age, breed, null, sound, size, coatLength);
+    return new PetDto(null, name, age, breed, null, sound, size, coatLength, PetType.DOG);
   }
 }

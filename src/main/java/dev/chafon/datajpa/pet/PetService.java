@@ -18,9 +18,9 @@ public class PetService {
     return petRepository.findPetById(id);
   }
 
-  public Long createPet(PetType petType, PetDto petDto) {
+  public Long createPet(PetDto petDto) {
     Pet petToBeSaved;
-    if (petType == PetType.CAT) {
+    if (petDto.type().equals(PetType.CAT)) {
       petToBeSaved = Cat.of(petDto);
     } else {
       petToBeSaved = Dog.of(petDto);

@@ -9,7 +9,7 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
       """
             SELECT NEW dev.chafon.datajpa.pet.PetDto
             (
-                p.id, p.name, p.age, p.breed, c.registry, d.sound, d.size, d.coatLength
+                p.id, p.name, p.age, p.breed, c.registry, d.sound, d.size, d.coatLength, p.type
             )
             FROM Pet p
             LEFT JOIN Cat c ON p.id = c.id
@@ -21,7 +21,7 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
       """
             SELECT NEW dev.chafon.datajpa.pet.PetDto
             (
-              p.id, p.name, p.age, p.breed, c.registry, d.sound, d.size, d.coatLength
+              p.id, p.name, p.age, p.breed, c.registry, d.sound, d.size, d.coatLength, p.type
             )
             FROM Pet p
             LEFT JOIN Cat c ON p.id = c.id
