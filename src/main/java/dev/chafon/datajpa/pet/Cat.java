@@ -25,4 +25,10 @@ public class Cat extends Pet {
         .type(PetType.CAT)
         .build();
   }
+
+  @Override
+  public void update(PetDto petDto) {
+    super.update(petDto);
+    this.registry = petDto.registry();
+  }
 }

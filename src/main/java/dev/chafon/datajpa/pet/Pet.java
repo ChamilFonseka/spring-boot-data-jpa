@@ -25,4 +25,10 @@ public abstract class Pet extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private PetType type;
+
+  public void update(PetDto petDto) {
+    this.name = petDto.name();
+    this.age = petDto.age();
+    this.breed = petDto.breed();
+  }
 }

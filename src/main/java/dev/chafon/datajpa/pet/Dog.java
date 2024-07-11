@@ -33,4 +33,12 @@ public class Dog extends Pet {
         .type(PetType.DOG)
         .build();
   }
+
+  @Override
+  public void update(PetDto petDto) {
+    super.update(petDto);
+    this.sound = petDto.sound();
+    this.size = petDto.size();
+    this.coatLength = petDto.coatLength();
+  }
 }

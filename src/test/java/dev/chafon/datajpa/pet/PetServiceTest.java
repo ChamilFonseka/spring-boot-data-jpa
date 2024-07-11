@@ -104,7 +104,7 @@ class PetServiceTest {
     assertThat(fetchedDog.registry()).isNull();
     assertThat(fetchedDog.type()).isEqualTo(PetType.DOG);
   }
-  
+
   @Test
   void shouldThrowPetNotFoundException() {
     long id = 99L;
@@ -149,6 +149,65 @@ class PetServiceTest {
     assertThat(dogFromDb.getSize()).isEqualTo(dogTobeSaved.size());
     assertThat(dogFromDb.getCoatLength()).isEqualTo(dogTobeSaved.coatLength());
     assertThat(dogFromDb.getType()).isEqualTo(PetType.DOG);
+  }
+
+  @Test
+  void shouldUpdateCat() {
+    Cat savedCat = petRepository.save(generateFakeCat());
+    PetDto catTobeUpdated = generateFakeCatDto();
+
+    petService.updatePet(savedCat.getId(), catTobeUpdated);
+
+    Optional<Pet> petOptional = petRepository.findById(savedCat.getId());
+    assertThat(petOptional).isPresent();
+
+    Cat catFromDb = (Cat) petOptional.get();
+    assertThat(catFromDb.getName()).isEqualTo(catTobeUpdated.name());
+    assertThat(catFromDb.getAge()).isEqualTo(catTobeUpdated.age());
+    assertThat(catFromDb.getBreed()).isEqualTo(catTobeUpdated.breed());
+    assertThat(catFromDb.getRegistry()).isEqualTo(catTobeUpdated.registry());
+    assertThat(catFromDb.getType()).isEqualTo(PetType.CAT);
+  }
+
+  @Test
+  void shouldUpdateDog() {
+    Dog savedDog = petRepository.save(generateFakeDog());
+    PetDto dogTobeUpdated = generateFakeDogDto();
+
+    petService.updatePet(savedDog.getId(), dogTobeUpdated);
+
+    Optional<Pet> petOptional = petRepository.findById(savedDog.getId());
+    assertThat(petOptional).isPresent();
+
+    Dog dogFromDb = (Dog) petOptional.get();
+    assertThat(dogFromDb.getName()).isEqualTo(dogTobeUpdated.name());
+    assertThat(dogFromDb.getAge()).isEqualTo(dogTobeUpdated.age());
+    assertThat(dogFromDb.getBreed()).isEqualTo(dogTobeUpdated.breed());
+    assertThat(dogFromDb.getSound()).isEqualTo(dogTobeUpdated.sound());
+    assertThat(dogFromDb.getSize()).isEqualTo(dogTobeUpdated.size());
+    assertThat(dogFromDb.getCoatLength()).isEqualTo(dogTobeUpdated.coatLength());
+    assertThat(dogFromDb.getType()).isEqualTo(PetType.DOG);
+  }
+
+  @Test
+  void shouldThrowPetNotFoundExceptionWhenUpdating() {
+    long id = 99L;
+    PetDto petTobeUpdated = generateFakeDogDto();
+    assertThatThrownBy(() -> petService.updatePet(id, petTobeUpdated))
+        .isInstanceOf(PetNotFoundException.class)
+        .hasMessageContaining("Pet with id " + id + " not found");
+  }
+
+  @Test
+  void shouldDeletePet() {
+    Cat savedCat = petRepository.save(generateFakeCat());
+    Dog savedDog = petRepository.save(generateFakeDog());
+
+    petService.deletePet(savedCat.getId());
+    assertThat(petRepository.findById(savedCat.getId())).isEmpty();
+
+    petService.deletePet(savedDog.getId());
+    assertThat(petRepository.findById(savedDog.getId())).isEmpty();
   }
 
   private PetDto generateFakeDogDto() {
