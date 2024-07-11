@@ -1,6 +1,7 @@
 package dev.chafon.datajpa.pet;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.chafon.datajpa.TestContainersConfiguration;
 import java.util.List;
@@ -102,6 +103,14 @@ class PetServiceTest {
     assertThat(fetchedDog.coatLength()).isEqualTo(savedDog.getCoatLength());
     assertThat(fetchedDog.registry()).isNull();
     assertThat(fetchedDog.type()).isEqualTo(PetType.DOG);
+  }
+  
+  @Test
+  void shouldThrowPetNotFoundException() {
+    long id = 99L;
+    assertThatThrownBy(() -> petService.getPet(id))
+        .isInstanceOf(PetNotFoundException.class)
+        .hasMessageContaining("Pet with id " + id + " not found");
   }
 
   @Test

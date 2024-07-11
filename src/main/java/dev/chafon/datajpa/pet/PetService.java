@@ -15,7 +15,11 @@ public class PetService {
   }
 
   public PetDto getPet(Long id) {
-    return petRepository.findPetById(id);
+    PetDto petById = petRepository.findPetById(id);
+    if (petById == null) {
+      throw new PetNotFoundException(id);
+    }
+    return petById;
   }
 
   public Long createPet(PetDto petDto) {
