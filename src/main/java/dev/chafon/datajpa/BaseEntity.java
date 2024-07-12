@@ -1,6 +1,7 @@
 package dev.chafon.datajpa;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @SuperBuilder
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
   @Id @GeneratedValue private Long id;
 
   @CreatedDate
