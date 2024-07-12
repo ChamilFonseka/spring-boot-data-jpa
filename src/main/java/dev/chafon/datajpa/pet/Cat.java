@@ -19,7 +19,7 @@ public class Cat extends Pet {
   public static Cat of(PetDto petDto) {
     return Cat.builder()
         .name(petDto.name())
-        .age(petDto.age())
+        .dateOfBirth(petDto.dateOfBirth())
         .breed(petDto.breed())
         .registry(petDto.registry())
         .type(PetType.CAT)

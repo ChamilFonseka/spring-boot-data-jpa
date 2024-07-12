@@ -1,9 +1,11 @@
 package dev.chafon.datajpa.pet;
 
+import java.time.LocalDate;
+
 public record PetDto(
     Long id,
     String name,
-    Integer age,
+    LocalDate dateOfBirth,
     String breed,
     String registry,
     String sound,
@@ -11,12 +13,17 @@ public record PetDto(
     String coatLength,
     PetType type) {
 
-  public static PetDto aCat(String name, int age, String breed, String registry) {
-    return new PetDto(null, name, age, breed, registry, null, null, null, PetType.CAT);
+  public static PetDto aCat(String name, LocalDate dateOfBirth, String breed, String registry) {
+    return new PetDto(null, name, dateOfBirth, breed, registry, null, null, null, PetType.CAT);
   }
 
   public static PetDto aDog(
-      String name, int age, String breed, String sound, String size, String coatLength) {
-    return new PetDto(null, name, age, breed, null, sound, size, coatLength, PetType.DOG);
+      String name,
+      LocalDate dateOfBirth,
+      String breed,
+      String sound,
+      String size,
+      String coatLength) {
+    return new PetDto(null, name, dateOfBirth, breed, null, sound, size, coatLength, PetType.DOG);
   }
 }

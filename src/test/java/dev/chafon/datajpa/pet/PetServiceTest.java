@@ -53,7 +53,7 @@ class PetServiceTest {
     PetDto fetchedCat = optionalCat.get();
     assertThat(fetchedCat.id()).isEqualTo(savedCat.getId());
     assertThat(fetchedCat.name()).isEqualTo(savedCat.getName());
-    assertThat(fetchedCat.age()).isEqualTo(savedCat.getAge());
+    assertThat(fetchedCat.dateOfBirth()).isEqualTo(savedCat.getDateOfBirth());
     assertThat(fetchedCat.registry()).isEqualTo(savedCat.getRegistry());
     assertThat(fetchedCat.sound()).isNull();
     assertThat(fetchedCat.size()).isNull();
@@ -67,7 +67,7 @@ class PetServiceTest {
     PetDto fetchedDog = optionalDog.get();
     assertThat(fetchedDog.id()).isEqualTo(savedDog.getId());
     assertThat(fetchedDog.name()).isEqualTo(savedDog.getName());
-    assertThat(fetchedDog.age()).isEqualTo(savedDog.getAge());
+    assertThat(fetchedDog.dateOfBirth()).isEqualTo(savedDog.getDateOfBirth());
     assertThat(fetchedDog.sound()).isEqualTo(savedDog.getSound());
     assertThat(fetchedDog.size()).isEqualTo(savedDog.getSize());
     assertThat(fetchedDog.coatLength()).isEqualTo(savedDog.getCoatLength());
@@ -82,7 +82,7 @@ class PetServiceTest {
     PetDto fetchedCat = petService.getPet(savedCat.getId());
     assertThat(fetchedCat.id()).isEqualTo(savedCat.getId());
     assertThat(fetchedCat.name()).isEqualTo(savedCat.getName());
-    assertThat(fetchedCat.age()).isEqualTo(savedCat.getAge());
+    assertThat(fetchedCat.dateOfBirth()).isEqualTo(savedCat.getDateOfBirth());
     assertThat(fetchedCat.registry()).isEqualTo(savedCat.getRegistry());
     assertThat(fetchedCat.sound()).isNull();
     assertThat(fetchedCat.size()).isNull();
@@ -97,7 +97,7 @@ class PetServiceTest {
     PetDto fetchedDog = petService.getPet(savedDog.getId());
     assertThat(fetchedDog.id()).isEqualTo(savedDog.getId());
     assertThat(fetchedDog.name()).isEqualTo(savedDog.getName());
-    assertThat(fetchedDog.age()).isEqualTo(savedDog.getAge());
+    assertThat(fetchedDog.dateOfBirth()).isEqualTo(savedDog.getDateOfBirth());
     assertThat(fetchedDog.sound()).isEqualTo(savedDog.getSound());
     assertThat(fetchedDog.size()).isEqualTo(savedDog.getSize());
     assertThat(fetchedDog.coatLength()).isEqualTo(savedDog.getCoatLength());
@@ -125,7 +125,7 @@ class PetServiceTest {
 
     Cat catFromDb = (Cat) petOptional.get();
     assertThat(catFromDb.getName()).isEqualTo(catTobeSaved.name());
-    assertThat(catFromDb.getAge()).isEqualTo(catTobeSaved.age());
+    assertThat(catFromDb.getDateOfBirth()).isEqualTo(catTobeSaved.dateOfBirth());
     assertThat(catFromDb.getBreed()).isEqualTo(catTobeSaved.breed());
     assertThat(catFromDb.getRegistry()).isEqualTo(catTobeSaved.registry());
     assertThat(catFromDb.getType()).isEqualTo(PetType.CAT);
@@ -143,7 +143,7 @@ class PetServiceTest {
 
     Dog dogFromDb = (Dog) petOptional.get();
     assertThat(dogFromDb.getName()).isEqualTo(dogTobeSaved.name());
-    assertThat(dogFromDb.getAge()).isEqualTo(dogTobeSaved.age());
+    assertThat(dogFromDb.getDateOfBirth()).isEqualTo(dogTobeSaved.dateOfBirth());
     assertThat(dogFromDb.getBreed()).isEqualTo(dogTobeSaved.breed());
     assertThat(dogFromDb.getSound()).isEqualTo(dogTobeSaved.sound());
     assertThat(dogFromDb.getSize()).isEqualTo(dogTobeSaved.size());
@@ -163,7 +163,7 @@ class PetServiceTest {
 
     Cat catFromDb = (Cat) petOptional.get();
     assertThat(catFromDb.getName()).isEqualTo(catTobeUpdated.name());
-    assertThat(catFromDb.getAge()).isEqualTo(catTobeUpdated.age());
+    assertThat(catFromDb.getDateOfBirth()).isEqualTo(catTobeUpdated.dateOfBirth());
     assertThat(catFromDb.getBreed()).isEqualTo(catTobeUpdated.breed());
     assertThat(catFromDb.getRegistry()).isEqualTo(catTobeUpdated.registry());
     assertThat(catFromDb.getType()).isEqualTo(PetType.CAT);
@@ -181,7 +181,7 @@ class PetServiceTest {
 
     Dog dogFromDb = (Dog) petOptional.get();
     assertThat(dogFromDb.getName()).isEqualTo(dogTobeUpdated.name());
-    assertThat(dogFromDb.getAge()).isEqualTo(dogTobeUpdated.age());
+    assertThat(dogFromDb.getDateOfBirth()).isEqualTo(dogTobeUpdated.dateOfBirth());
     assertThat(dogFromDb.getBreed()).isEqualTo(dogTobeUpdated.breed());
     assertThat(dogFromDb.getSound()).isEqualTo(dogTobeUpdated.sound());
     assertThat(dogFromDb.getSize()).isEqualTo(dogTobeUpdated.size());
@@ -214,7 +214,7 @@ class PetServiceTest {
     net.datafaker.providers.base.Dog fakeDog = faker.dog();
     return PetDto.aDog(
         fakeDog.name(),
-        faker.number().numberBetween(1, 10),
+        faker.date().birthdayLocalDate(1, 15),
         fakeDog.breed(),
         fakeDog.sound(),
         fakeDog.size(),
@@ -225,7 +225,7 @@ class PetServiceTest {
     net.datafaker.providers.base.Dog fakeDog = faker.dog();
     return Dog.builder()
         .name(fakeDog.name())
-        .age(faker.number().numberBetween(1, 10))
+        .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
         .breed(fakeDog.breed())
         .sound(fakeDog.sound())
         .size(fakeDog.size())
@@ -237,14 +237,14 @@ class PetServiceTest {
   private PetDto generateFakeCatDto() {
     net.datafaker.providers.base.Cat fakeCat = faker.cat();
     return PetDto.aCat(
-        fakeCat.name(), faker.number().numberBetween(1, 10), fakeCat.breed(), fakeCat.registry());
+        fakeCat.name(), faker.date().birthdayLocalDate(1, 15), fakeCat.breed(), fakeCat.registry());
   }
 
   private Cat generateFakeCat() {
     net.datafaker.providers.base.Cat fakeCat = faker.cat();
     return Cat.builder()
         .name(fakeCat.name())
-        .age(faker.number().numberBetween(1, 10))
+        .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
         .breed(fakeCat.breed())
         .registry(fakeCat.registry())
         .type(PetType.CAT)

@@ -2,6 +2,7 @@ package dev.chafon.datajpa.pet;
 
 import dev.chafon.datajpa.BaseEntity;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -17,7 +18,7 @@ public abstract class Pet extends BaseEntity {
   private String name;
 
   @Column(nullable = false)
-  private int age;
+  private LocalDate dateOfBirth;
 
   @Column(nullable = false)
   private String breed;
@@ -28,7 +29,7 @@ public abstract class Pet extends BaseEntity {
 
   public void update(PetDto petDto) {
     this.name = petDto.name();
-    this.age = petDto.age();
+    this.dateOfBirth = petDto.dateOfBirth();
     this.breed = petDto.breed();
   }
 }

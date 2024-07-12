@@ -25,7 +25,7 @@ public class Dog extends Pet {
   public static Pet of(PetDto petDto) {
     return Dog.builder()
         .name(petDto.name())
-        .age(petDto.age())
+        .dateOfBirth(petDto.dateOfBirth())
         .breed(petDto.breed())
         .sound(petDto.sound())
         .size(petDto.size())
