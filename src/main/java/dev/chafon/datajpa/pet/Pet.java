@@ -34,4 +34,23 @@ public abstract class Pet extends BaseEntity {
     this.dateOfBirth = petDto.dateOfBirth();
     this.breed = petDto.breed();
   }
+
+  @Override
+  public String toString() {
+    return "Pet{"
+        + "id='"
+        + getId()
+        + '\''
+        + "name='"
+        + name
+        + '\''
+        + ", dateOfBirth="
+        + dateOfBirth
+        + ", breed='"
+        + breed
+        + '\''
+        + ", type="
+        + type
+        + '}';
+  }
 }
