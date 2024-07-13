@@ -5,10 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.chafon.datajpa.TestContainersConfiguration;
 import dev.chafon.datajpa.pet.cat.Cat;
-import dev.chafon.datajpa.pet.cat.CatRepository;
 import dev.chafon.datajpa.pet.cat.CatView;
 import dev.chafon.datajpa.pet.dog.Dog;
-import dev.chafon.datajpa.pet.dog.DogRepository;
 import dev.chafon.datajpa.pet.dog.DogView;
 import java.util.List;
 import java.util.Objects;
@@ -30,8 +28,6 @@ class PetServiceTest {
   @Autowired private PetService petService;
 
   @Autowired private TestPetRepository petRepository;
-  @Autowired private CatRepository catRepository;
-  @Autowired private DogRepository dogRepository;
 
   private Faker faker;
 
@@ -78,7 +74,7 @@ class PetServiceTest {
   }
 
   @Test
-  void shouldReturnSavedCatById() {
+  void shouldReturnCatById() {
     Cat savedCat = petRepository.save(generateFakeCat());
 
     CatView fetchedCat = (CatView) petService.getPet(savedCat.getId());
@@ -91,7 +87,7 @@ class PetServiceTest {
   }
 
   @Test
-  void shouldReturnSavedDogById() {
+  void shouldReturnDogById() {
     Dog savedDog = petRepository.save(generateFakeDog());
 
     DogView fetchedDog = (DogView) petService.getPet(savedDog.getId());
@@ -190,7 +186,7 @@ class PetServiceTest {
   }
 
   @Test
-  void shouldThrowPetNotFoundExceptionWhenUpdating() {
+  void shouldThrowPetNotFoundExceptionOnUpdate() {
     long id = 99L;
     PetDto petTobeUpdated = generateFakeDogDto();
     assertThatThrownBy(() -> petService.updatePet(id, petTobeUpdated))
