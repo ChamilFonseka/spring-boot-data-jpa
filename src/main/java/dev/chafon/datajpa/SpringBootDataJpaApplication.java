@@ -1,5 +1,8 @@
 package dev.chafon.datajpa;
 
+import dev.chafon.datajpa.owner.Address;
+import dev.chafon.datajpa.owner.Owner;
+import dev.chafon.datajpa.owner.OwnerRepository;
 import dev.chafon.datajpa.pet.PetRepository;
 import dev.chafon.datajpa.pet.PetType;
 import dev.chafon.datajpa.pet.cat.Cat;
@@ -22,7 +25,8 @@ public class SpringBootDataJpaApplication {
 
   @Bean
   @Profile("dev")
-  ApplicationRunner applicationRunner(PetRepository petRepository) {
+  ApplicationRunner applicationRunner(
+      PetRepository petRepository, OwnerRepository ownerRepository) {
     return args -> {
       Faker faker = new Faker();
 
@@ -46,6 +50,19 @@ public class SpringBootDataJpaApplication {
               .sound(fakeDog.sound())
               .coatLength(fakeDog.coatLength())
               .type(PetType.DOG)
+              .build());
+
+      ownerRepository.save(
+          Owner.builder()
+              .firstName(faker.name().firstName())
+              .lastName(faker.name().lastName())
+              .phoneNumber(faker.phoneNumber().phoneNumber())
+              .address(
+                  new Address(
+                      faker.address().streetAddress(),
+                      faker.address().city(),
+                      faker.address().state(),
+                      faker.address().zipCode()))
               .build());
     };
   }
