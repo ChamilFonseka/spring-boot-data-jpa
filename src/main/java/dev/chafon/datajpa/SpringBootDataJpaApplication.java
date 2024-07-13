@@ -1,9 +1,9 @@
 package dev.chafon.datajpa;
 
-import dev.chafon.datajpa.pet.cat.Cat;
-import dev.chafon.datajpa.pet.dog.Dog;
 import dev.chafon.datajpa.pet.PetRepository;
 import dev.chafon.datajpa.pet.PetType;
+import dev.chafon.datajpa.pet.cat.Cat;
+import dev.chafon.datajpa.pet.dog.Dog;
 import net.datafaker.Faker;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;

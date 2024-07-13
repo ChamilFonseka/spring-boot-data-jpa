@@ -4,16 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.chafon.datajpa.TestContainersConfiguration;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import dev.chafon.datajpa.pet.cat.Cat;
 import dev.chafon.datajpa.pet.cat.CatRepository;
 import dev.chafon.datajpa.pet.cat.CatView;
 import dev.chafon.datajpa.pet.dog.Dog;
 import dev.chafon.datajpa.pet.dog.DogRepository;
 import dev.chafon.datajpa.pet.dog.DogView;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +29,7 @@ class PetServiceTest {
 
   @Autowired private PetService petService;
 
-  @Autowired private PetRepository petRepository;
+  @Autowired private TestPetRepository petRepository;
   @Autowired private CatRepository catRepository;
   @Autowired private DogRepository dogRepository;
 
@@ -251,7 +250,4 @@ class PetServiceTest {
         .type(PetType.CAT)
         .build();
   }
-
-  @Test
-  void name() {}
 }

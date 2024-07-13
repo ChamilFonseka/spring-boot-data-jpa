@@ -1,10 +1,10 @@
 package dev.chafon.datajpa.pet;
 
+import dev.chafon.datajpa.BaseRepository;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PetRepository extends JpaRepository<Pet, Long> {
+public interface PetRepository extends BaseRepository<Pet, Long> {
   List<PetView> findPetViewBy();
 
   Optional<PetView> findPetViewById(Long id);

@@ -1,7 +1,7 @@
 package dev.chafon.datajpa.pet.cat;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import dev.chafon.datajpa.BaseRepository;
 
-public interface CatRepository extends JpaRepository<Cat, Long> {
+public interface CatRepository extends BaseRepository<Cat, Long> {
   CatView findCatViewById(Long id);
 }

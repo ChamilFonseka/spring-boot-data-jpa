@@ -1,7 +1,7 @@
 package dev.chafon.datajpa.pet.dog;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import dev.chafon.datajpa.BaseRepository;
 
-public interface DogRepository extends JpaRepository<Dog, Long> {
+public interface DogRepository extends BaseRepository<Dog, Long> {
   DogView findDogViewById(Long id);
 }
