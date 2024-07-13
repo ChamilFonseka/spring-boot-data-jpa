@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @SuperBuilder
@@ -13,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "pets")
+@DynamicUpdate
 public abstract class Pet extends BaseEntity {
   @Column(nullable = false)
   private String name;
