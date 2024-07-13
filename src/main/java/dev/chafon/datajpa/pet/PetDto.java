@@ -3,7 +3,6 @@ package dev.chafon.datajpa.pet;
 import java.time.LocalDate;
 
 public record PetDto(
-    Long id,
     String name,
     LocalDate dateOfBirth,
     String breed,
@@ -14,7 +13,7 @@ public record PetDto(
     PetType type) {
 
   public static PetDto aCat(String name, LocalDate dateOfBirth, String breed, String registry) {
-    return new PetDto(null, name, dateOfBirth, breed, registry, null, null, null, PetType.CAT);
+    return new PetDto(name, dateOfBirth, breed, registry, null, null, null, PetType.CAT);
   }
 
   public static PetDto aDog(
@@ -24,6 +23,6 @@ public record PetDto(
       String sound,
       String size,
       String coatLength) {
-    return new PetDto(null, name, dateOfBirth, breed, null, sound, size, coatLength, PetType.DOG);
+    return new PetDto(name, dateOfBirth, breed, null, sound, size, coatLength, PetType.DOG);
   }
 }

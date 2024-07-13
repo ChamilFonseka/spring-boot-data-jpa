@@ -7,6 +7,13 @@ import dev.chafon.datajpa.TestContainersConfiguration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import dev.chafon.datajpa.pet.cat.Cat;
+import dev.chafon.datajpa.pet.cat.CatRepository;
+import dev.chafon.datajpa.pet.cat.CatView;
+import dev.chafon.datajpa.pet.dog.Dog;
+import dev.chafon.datajpa.pet.dog.DogRepository;
+import dev.chafon.datajpa.pet.dog.DogView;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,6 +31,8 @@ class PetServiceTest {
   @Autowired private PetService petService;
 
   @Autowired private PetRepository petRepository;
+  @Autowired private CatRepository catRepository;
+  @Autowired private DogRepository dogRepository;
 
   private Faker faker;
 
@@ -42,67 +51,59 @@ class PetServiceTest {
     Cat savedCat = petRepository.save(generateFakeCat());
     Dog savedDog = petRepository.save(generateFakeDog());
 
-    List<PetDto> allPets = petService.getPets();
+    List<PetView> allPets = petService.getPets();
     assertThat(allPets).isNotNull();
     assertThat(allPets).hasSize(2);
 
-    Optional<PetDto> optionalCat =
-        allPets.stream().filter(pet -> Objects.equals(pet.id(), savedCat.getId())).findAny();
+    Optional<PetView> optionalCat =
+        allPets.stream().filter(pet -> Objects.equals(pet.getId(), savedCat.getId())).findAny();
     assertThat(optionalCat).isPresent();
 
-    PetDto fetchedCat = optionalCat.get();
-    assertThat(fetchedCat.id()).isEqualTo(savedCat.getId());
-    assertThat(fetchedCat.name()).isEqualTo(savedCat.getName());
-    assertThat(fetchedCat.dateOfBirth()).isEqualTo(savedCat.getDateOfBirth());
-    assertThat(fetchedCat.registry()).isEqualTo(savedCat.getRegistry());
-    assertThat(fetchedCat.sound()).isNull();
-    assertThat(fetchedCat.size()).isNull();
-    assertThat(fetchedCat.coatLength()).isNull();
-    assertThat(fetchedCat.type()).isEqualTo(PetType.CAT);
+    PetView fetchedCat = optionalCat.get();
+    assertThat(fetchedCat.getId()).isEqualTo(savedCat.getId());
+    assertThat(fetchedCat.getName()).isEqualTo(savedCat.getName());
+    assertThat(fetchedCat.getDateOfBirth()).isEqualTo(savedCat.getDateOfBirth());
+    assertThat(fetchedCat.getBreed()).isEqualTo(savedCat.getBreed());
+    assertThat(fetchedCat.getType()).isEqualTo(PetType.CAT);
 
-    Optional<PetDto> optionalDog =
-        allPets.stream().filter(pet -> Objects.equals(pet.id(), savedDog.getId())).findAny();
+    Optional<PetView> optionalDog =
+        allPets.stream().filter(pet -> Objects.equals(pet.getId(), savedDog.getId())).findAny();
     assertThat(optionalDog).isPresent();
 
-    PetDto fetchedDog = optionalDog.get();
-    assertThat(fetchedDog.id()).isEqualTo(savedDog.getId());
-    assertThat(fetchedDog.name()).isEqualTo(savedDog.getName());
-    assertThat(fetchedDog.dateOfBirth()).isEqualTo(savedDog.getDateOfBirth());
-    assertThat(fetchedDog.sound()).isEqualTo(savedDog.getSound());
-    assertThat(fetchedDog.size()).isEqualTo(savedDog.getSize());
-    assertThat(fetchedDog.coatLength()).isEqualTo(savedDog.getCoatLength());
-    assertThat(fetchedDog.registry()).isNull();
-    assertThat(fetchedDog.type()).isEqualTo(PetType.DOG);
+    PetView fetchedDog = optionalDog.get();
+    assertThat(fetchedDog.getId()).isEqualTo(savedDog.getId());
+    assertThat(fetchedDog.getName()).isEqualTo(savedDog.getName());
+    assertThat(fetchedDog.getDateOfBirth()).isEqualTo(savedDog.getDateOfBirth());
+    assertThat(fetchedDog.getBreed()).isEqualTo(savedDog.getBreed());
+    assertThat(fetchedDog.getType()).isEqualTo(PetType.DOG);
   }
 
   @Test
   void shouldReturnSavedCatById() {
     Cat savedCat = petRepository.save(generateFakeCat());
 
-    PetDto fetchedCat = petService.getPet(savedCat.getId());
-    assertThat(fetchedCat.id()).isEqualTo(savedCat.getId());
-    assertThat(fetchedCat.name()).isEqualTo(savedCat.getName());
-    assertThat(fetchedCat.dateOfBirth()).isEqualTo(savedCat.getDateOfBirth());
-    assertThat(fetchedCat.registry()).isEqualTo(savedCat.getRegistry());
-    assertThat(fetchedCat.sound()).isNull();
-    assertThat(fetchedCat.size()).isNull();
-    assertThat(fetchedCat.coatLength()).isNull();
-    assertThat(fetchedCat.type()).isEqualTo(PetType.CAT);
+    CatView fetchedCat = (CatView) petService.getPet(savedCat.getId());
+    assertThat(fetchedCat.getId()).isEqualTo(savedCat.getId());
+    assertThat(fetchedCat.getName()).isEqualTo(savedCat.getName());
+    assertThat(fetchedCat.getDateOfBirth()).isEqualTo(savedCat.getDateOfBirth());
+    assertThat(fetchedCat.getBreed()).isEqualTo(savedCat.getBreed());
+    assertThat(fetchedCat.getRegistry()).isEqualTo(savedCat.getRegistry());
+    assertThat(fetchedCat.getType()).isEqualTo(PetType.CAT);
   }
 
   @Test
   void shouldReturnSavedDogById() {
     Dog savedDog = petRepository.save(generateFakeDog());
 
-    PetDto fetchedDog = petService.getPet(savedDog.getId());
-    assertThat(fetchedDog.id()).isEqualTo(savedDog.getId());
-    assertThat(fetchedDog.name()).isEqualTo(savedDog.getName());
-    assertThat(fetchedDog.dateOfBirth()).isEqualTo(savedDog.getDateOfBirth());
-    assertThat(fetchedDog.sound()).isEqualTo(savedDog.getSound());
-    assertThat(fetchedDog.size()).isEqualTo(savedDog.getSize());
-    assertThat(fetchedDog.coatLength()).isEqualTo(savedDog.getCoatLength());
-    assertThat(fetchedDog.registry()).isNull();
-    assertThat(fetchedDog.type()).isEqualTo(PetType.DOG);
+    DogView fetchedDog = (DogView) petService.getPet(savedDog.getId());
+    assertThat(fetchedDog.getId()).isEqualTo(savedDog.getId());
+    assertThat(fetchedDog.getName()).isEqualTo(savedDog.getName());
+    assertThat(fetchedDog.getDateOfBirth()).isEqualTo(savedDog.getDateOfBirth());
+    assertThat(fetchedDog.getBreed()).isEqualTo(savedDog.getBreed());
+    assertThat(fetchedDog.getSound()).isEqualTo(savedDog.getSound());
+    assertThat(fetchedDog.getSize()).isEqualTo(savedDog.getSize());
+    assertThat(fetchedDog.getCoatLength()).isEqualTo(savedDog.getCoatLength());
+    assertThat(fetchedDog.getType()).isEqualTo(PetType.DOG);
   }
 
   @Test
@@ -250,4 +251,7 @@ class PetServiceTest {
         .type(PetType.CAT)
         .build();
   }
+
+  @Test
+  void name() {}
 }

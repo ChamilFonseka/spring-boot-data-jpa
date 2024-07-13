@@ -1,5 +1,8 @@
-package dev.chafon.datajpa.pet;
+package dev.chafon.datajpa.pet.dog;
 
+import dev.chafon.datajpa.pet.Pet;
+import dev.chafon.datajpa.pet.PetDto;
+import dev.chafon.datajpa.pet.PetType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

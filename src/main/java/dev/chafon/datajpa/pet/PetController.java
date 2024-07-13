@@ -16,12 +16,12 @@ public class PetController {
   private final PetService petService;
 
   @GetMapping
-  List<PetDto> getPets() {
+  List<PetView> getPets() {
     return petService.getPets();
   }
 
   @GetMapping("/{id}")
-  PetDto getPet(@PathVariable Long id) {
+  PetView getPet(@PathVariable Long id) {
     return petService.getPet(id);
   }
 

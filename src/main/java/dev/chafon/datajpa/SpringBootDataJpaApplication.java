@@ -1,7 +1,7 @@
 package dev.chafon.datajpa;
 
-import dev.chafon.datajpa.pet.Cat;
-import dev.chafon.datajpa.pet.Dog;
+import dev.chafon.datajpa.pet.cat.Cat;
+import dev.chafon.datajpa.pet.dog.Dog;
 import dev.chafon.datajpa.pet.PetRepository;
 import dev.chafon.datajpa.pet.PetType;
 import net.datafaker.Faker;

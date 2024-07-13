@@ -1,6 +1,11 @@
 package dev.chafon.datajpa.pet;
 
 import java.util.List;
+
+import dev.chafon.datajpa.pet.cat.Cat;
+import dev.chafon.datajpa.pet.cat.CatRepository;
+import dev.chafon.datajpa.pet.dog.Dog;
+import dev.chafon.datajpa.pet.dog.DogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,17 +14,22 @@ import org.springframework.stereotype.Service;
 public class PetService {
 
   private final PetRepository petRepository;
+  private final CatRepository catRepository;
+  private final DogRepository dogRepository;
 
-  public List<PetDto> getPets() {
-    return petRepository.findAllPets();
+  public List<PetView> getPets() {
+    return petRepository.findPetViewBy();
   }
 
-  public PetDto getPet(Long id) {
-    PetDto petById = petRepository.findPetById(id);
-    if (petById == null) {
-      throw new PetNotFoundException(id);
+  public PetView getPet(Long id) {
+    PetView petView =
+        petRepository.findPetViewById(id).orElseThrow(() -> new PetNotFoundException(id));
+
+    if (petView.getType().equals(PetType.CAT)) {
+      return catRepository.findCatViewById(id);
+    } else {
+      return dogRepository.findDogViewById(id);
     }
-    return petById;
   }
 
   public Long createPet(PetDto petDto) {
