@@ -8,7 +8,7 @@ import org.springframework.data.repository.Repository;
 public interface BaseRepository<T, ID> extends Repository<T, ID> {
   Optional<T> findById(ID id);
 
-  T save(T t);
+  <S extends T> S save(T t);
 
   void deleteById(ID id);
 }
