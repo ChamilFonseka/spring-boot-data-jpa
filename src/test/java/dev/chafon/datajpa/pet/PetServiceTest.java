@@ -1,12 +1,12 @@
 package dev.chafon.datajpa.pet;
 
 import static dev.chafon.datajpa.TestUtil.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 import dev.chafon.datajpa.TestContainersConfiguration;
 import dev.chafon.datajpa.TestUtil;
 import dev.chafon.datajpa.owner.Owner;
+import dev.chafon.datajpa.owner.OwnerNotFoundException;
 import dev.chafon.datajpa.owner.TestOwnerRepository;
 import dev.chafon.datajpa.pet.cat.Cat;
 import dev.chafon.datajpa.pet.cat.CatView;
@@ -14,7 +14,6 @@ import dev.chafon.datajpa.pet.dog.Dog;
 import dev.chafon.datajpa.pet.dog.DogView;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,27 +62,41 @@ class PetServiceTest {
     assertThat(allPets).isNotNull();
     assertThat(allPets).hasSize(2);
 
-    Optional<PetView> optionalCat =
-        allPets.stream().filter(pet -> Objects.equals(pet.getId(), savedCat.getId())).findAny();
-    assertThat(optionalCat).isPresent();
+    assertThat(allPets).extracting(PetView::getId).contains(savedCat.getId(), savedDog.getId());
 
-    PetView fetchedCat = optionalCat.get();
-    assertThat(fetchedCat.getId()).isEqualTo(savedCat.getId());
-    assertThat(fetchedCat.getName()).isEqualTo(savedCat.getName());
-    assertThat(fetchedCat.getDateOfBirth()).isEqualTo(savedCat.getDateOfBirth());
-    assertThat(fetchedCat.getBreed()).isEqualTo(savedCat.getBreed());
-    assertThat(fetchedCat.getType()).isEqualTo(PetType.CAT);
+    assertThat(allPets)
+        .extracting(PetView::getName)
+        .contains(savedCat.getName(), savedDog.getName());
 
-    Optional<PetView> optionalDog =
-        allPets.stream().filter(pet -> Objects.equals(pet.getId(), savedDog.getId())).findAny();
-    assertThat(optionalDog).isPresent();
+    assertThat(allPets)
+        .extracting(PetView::getDateOfBirth)
+        .contains(savedCat.getDateOfBirth(), savedDog.getDateOfBirth());
 
-    PetView fetchedDog = optionalDog.get();
-    assertThat(fetchedDog.getId()).isEqualTo(savedDog.getId());
-    assertThat(fetchedDog.getName()).isEqualTo(savedDog.getName());
-    assertThat(fetchedDog.getDateOfBirth()).isEqualTo(savedDog.getDateOfBirth());
-    assertThat(fetchedDog.getBreed()).isEqualTo(savedDog.getBreed());
-    assertThat(fetchedDog.getType()).isEqualTo(PetType.DOG);
+    assertThat(allPets)
+        .extracting(PetView::getBreed)
+        .contains(savedCat.getBreed(), savedDog.getBreed());
+
+    assertThat(allPets).extracting(PetView::getType).contains(PetType.CAT, PetType.DOG);
+
+    assertThat(allPets)
+        .extracting(PetView::getOwner)
+        .extracting(PetView.OwnerView::getId)
+        .contains(owner.getId());
+
+    assertThat(allPets)
+        .extracting(PetView::getOwner)
+        .extracting(PetView.OwnerView::getFirstName)
+        .contains(owner.getFirstName());
+
+    assertThat(allPets)
+        .extracting(PetView::getOwner)
+        .extracting(PetView.OwnerView::getLastName)
+        .contains(owner.getLastName());
+
+    assertThat(allPets)
+        .extracting(PetView::getOwner)
+        .extracting(PetView.OwnerView::getPhoneNumber)
+        .contains(owner.getPhoneNumber());
   }
 
   @Test
@@ -120,6 +133,15 @@ class PetServiceTest {
     assertThatThrownBy(() -> petService.getPet(id))
         .isInstanceOf(PetNotFoundException.class)
         .hasMessageContaining("Pet with id " + id + " not found");
+  }
+
+  @Test
+  void shouldThrowOwnerNotFoundException() {
+    long id = 99L;
+    PetDto catTobeSaved = generateFakeCatDto(id);
+    assertThatThrownBy(() -> petService.createPet(catTobeSaved))
+        .isInstanceOf(OwnerNotFoundException.class)
+        .hasMessageContaining("Owner with id " + id + " not found");
   }
 
   @Test

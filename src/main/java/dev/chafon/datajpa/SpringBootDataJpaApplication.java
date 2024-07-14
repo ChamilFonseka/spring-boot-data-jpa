@@ -29,42 +29,43 @@ public class SpringBootDataJpaApplication {
       PetRepository petRepository, OwnerRepository ownerRepository) {
     return args -> {
       Faker faker = new Faker();
+      for (int i = 0; i < 10; i++) {
+        Owner owner =
+            ownerRepository.save(
+                Owner.builder()
+                    .firstName(faker.name().firstName())
+                    .lastName(faker.name().lastName())
+                    .phoneNumber(faker.phoneNumber().phoneNumber())
+                    .address(
+                        new Address(
+                            faker.address().streetAddress(),
+                            faker.address().city(),
+                            faker.address().state(),
+                            faker.address().zipCode()))
+                    .build());
 
-      Owner owner =
-          ownerRepository.save(
-              Owner.builder()
-                  .firstName(faker.name().firstName())
-                  .lastName(faker.name().lastName())
-                  .phoneNumber(faker.phoneNumber().phoneNumber())
-                  .address(
-                      new Address(
-                          faker.address().streetAddress(),
-                          faker.address().city(),
-                          faker.address().state(),
-                          faker.address().zipCode()))
-                  .build());
+        petRepository.save(
+            Cat.builder()
+                .name(faker.cat().name())
+                .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
+                .breed(faker.cat().breed())
+                .registry(faker.cat().registry())
+                .type(PetType.CAT)
+                .owner(owner)
+                .build());
 
-      petRepository.save(
-          Cat.builder()
-              .name(faker.cat().name())
-              .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
-              .breed(faker.cat().breed())
-              .registry(faker.cat().registry())
-              .type(PetType.CAT)
-              .owner(owner)
-              .build());
-
-      petRepository.save(
-          Dog.builder()
-              .name(faker.dog().name())
-              .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
-              .breed(faker.dog().breed())
-              .size(faker.dog().size())
-              .sound(faker.dog().sound())
-              .coatLength(faker.dog().coatLength())
-              .type(PetType.DOG)
-              .owner(owner)
-              .build());
+        petRepository.save(
+            Dog.builder()
+                .name(faker.dog().name())
+                .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
+                .breed(faker.dog().breed())
+                .size(faker.dog().size())
+                .sound(faker.dog().sound())
+                .coatLength(faker.dog().coatLength())
+                .type(PetType.DOG)
+                .owner(owner)
+                .build());
+      }
     };
   }
 }

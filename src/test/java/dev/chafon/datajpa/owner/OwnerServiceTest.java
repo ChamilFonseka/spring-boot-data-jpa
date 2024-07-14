@@ -1,13 +1,16 @@
 package dev.chafon.datajpa.owner;
 
-import static dev.chafon.datajpa.TestUtil.generateFakeOwner;
-import static dev.chafon.datajpa.TestUtil.generateFakeOwnerDto;
+import static dev.chafon.datajpa.TestUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.chafon.datajpa.TestContainersConfiguration;
+import dev.chafon.datajpa.pet.Pet;
+import dev.chafon.datajpa.pet.TestPetRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,10 @@ class OwnerServiceTest {
 
   @Autowired private TestOwnerRepository ownerRepository;
 
+  @Autowired private TestPetRepository petRepository;
+
+  @Autowired EntityManager entityManager;
+
   @AfterEach
   void tearDown() {
     ownerRepository.deleteAll();
@@ -34,7 +41,14 @@ class OwnerServiceTest {
   @Test
   void shouldReturnAllOwners() {
     Owner owner1 = ownerRepository.save(generateFakeOwner());
+    Pet owner1Cat = petRepository.save(generateFakeCat(owner1));
+    Pet owner1Dog = petRepository.save(generateFakeDog(owner1));
+
     Owner owner2 = ownerRepository.save(generateFakeOwner());
+    Pet owner2Cat = petRepository.save(generateFakeCat(owner2));
+    Pet owner2Dog = petRepository.save(generateFakeDog(owner2));
+
+    entityManager.clear();
 
     List<OwnerView> allOwners = ownerService.getOwners();
     assertThat(allOwners).isNotNull();
@@ -73,11 +87,48 @@ class OwnerServiceTest {
         .extracting(OwnerView::getAddress)
         .extracting(OwnerView.AddressView::getZipCode)
         .contains(owner1.getAddress().zipCode(), owner2.getAddress().zipCode());
+
+    assertThat(allOwners).extracting(OwnerView::getPets).extracting(Set::size).contains(2, 2);
+
+    assertThat(allOwners)
+        .extracting(OwnerView::getPets)
+        .flatExtracting(pets -> pets)
+        .extracting(OwnerView.PetView::getName)
+        .contains(
+            owner1Cat.getName(), owner1Dog.getName(), owner2Cat.getName(), owner2Dog.getName());
+
+    assertThat(allOwners)
+        .extracting(OwnerView::getPets)
+        .flatExtracting(pets -> pets)
+        .extracting(OwnerView.PetView::getDateOfBirth)
+        .contains(
+            owner1Cat.getDateOfBirth(),
+            owner1Dog.getDateOfBirth(),
+            owner2Cat.getDateOfBirth(),
+            owner2Dog.getDateOfBirth());
+
+    assertThat(allOwners)
+        .extracting(OwnerView::getPets)
+        .flatExtracting(pets -> pets)
+        .extracting(OwnerView.PetView::getBreed)
+        .contains(
+            owner1Cat.getBreed(), owner1Dog.getBreed(), owner2Cat.getBreed(), owner2Dog.getBreed());
+
+    assertThat(allOwners)
+        .extracting(OwnerView::getPets)
+        .flatExtracting(pets -> pets)
+        .extracting(OwnerView.PetView::getType)
+        .contains(
+            owner1Cat.getType(), owner1Dog.getType(), owner2Cat.getType(), owner2Dog.getType());
   }
 
   @Test
   void shouldReturnOwnerById() {
     Owner owner = ownerRepository.save(generateFakeOwner());
+    Pet cat = petRepository.save(generateFakeCat(owner));
+    Pet dog = petRepository.save(generateFakeDog(owner));
+
+    entityManager.clear();
 
     OwnerView fetchedOwner = ownerService.getOwner(owner.getId());
     assertThat(fetchedOwner.getId()).isEqualTo(owner.getId());
@@ -88,6 +139,10 @@ class OwnerServiceTest {
     assertThat(fetchedOwner.getAddress().getCity()).isEqualTo(owner.getAddress().city());
     assertThat(fetchedOwner.getAddress().getState()).isEqualTo(owner.getAddress().state());
     assertThat(fetchedOwner.getAddress().getZipCode()).isEqualTo(owner.getAddress().zipCode());
+    assertThat(fetchedOwner.getPets()).hasSize(2);
+    assertThat(fetchedOwner.getPets())
+        .extracting(OwnerView.PetView::getName)
+        .contains(cat.getName(), dog.getName());
   }
 
   @Test

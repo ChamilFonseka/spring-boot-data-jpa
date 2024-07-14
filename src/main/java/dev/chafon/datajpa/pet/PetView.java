@@ -12,4 +12,16 @@ public interface PetView {
   String getBreed();
 
   PetType getType();
+
+  OwnerView getOwner();
+
+  interface OwnerView {
+    Long getId();
+
+    String getFirstName();
+
+    String getLastName();
+
+    String getPhoneNumber();
+  }
 }
