@@ -2,8 +2,11 @@ package dev.chafon.datajpa.pet;
 
 import dev.chafon.datajpa.BaseEntity;
 import dev.chafon.datajpa.owner.Owner;
+import dev.chafon.datajpa.vet.Vet;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicUpdate;
@@ -34,10 +37,21 @@ public abstract class Pet extends BaseEntity {
   @JoinColumn(nullable = false)
   private Owner owner;
 
-  public void update(PetDto petDto) {
+  @ManyToMany
+  @JoinTable(
+      name = "pets_vets",
+      joinColumns = @JoinColumn(name = "pet_id"),
+      inverseJoinColumns = @JoinColumn(name = "vet_id"))
+  @Builder.Default
+  private Set<Vet> vets = new LinkedHashSet<>();
+
+  public void update(PetDto petDto, Owner owner, Set<Vet> vets) {
     this.name = petDto.name();
     this.dateOfBirth = petDto.dateOfBirth();
     this.breed = petDto.breed();
+    this.type = petDto.type();
+    this.owner = owner;
+    this.vets = vets;
   }
 
   @Override

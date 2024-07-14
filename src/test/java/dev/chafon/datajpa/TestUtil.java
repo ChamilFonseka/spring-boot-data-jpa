@@ -7,6 +7,7 @@ import dev.chafon.datajpa.pet.PetDto;
 import dev.chafon.datajpa.pet.PetType;
 import dev.chafon.datajpa.pet.cat.Cat;
 import dev.chafon.datajpa.pet.dog.Dog;
+import java.util.Set;
 import net.datafaker.Faker;
 
 public class TestUtil {
@@ -59,7 +60,8 @@ public class TestUtil {
         faker.dog().sound(),
         faker.dog().size(),
         faker.dog().coatLength(),
-        ownerId);
+        ownerId,
+        Set.of());
   }
 
   public static Cat generateFakeCat(Owner owner) {
@@ -79,6 +81,7 @@ public class TestUtil {
         faker.date().birthdayLocalDate(1, 15),
         faker.cat().breed(),
         faker.cat().registry(),
-        ownerId);
+        ownerId,
+        Set.of());
   }
 }

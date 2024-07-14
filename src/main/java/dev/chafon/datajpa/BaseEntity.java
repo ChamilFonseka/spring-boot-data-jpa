@@ -31,8 +31,7 @@ public abstract class BaseEntity implements Serializable {
   @Column(insertable = false)
   private Instant lastModifiedDate;
 
-  @Version
-  private Long version;
+  @Version private Long version;
 
   @Override
   public boolean equals(Object o) {
