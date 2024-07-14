@@ -30,39 +30,40 @@ public class SpringBootDataJpaApplication {
     return args -> {
       Faker faker = new Faker();
 
-      net.datafaker.providers.base.Cat fakeCat = faker.cat();
+      Owner owner =
+          ownerRepository.save(
+              Owner.builder()
+                  .firstName(faker.name().firstName())
+                  .lastName(faker.name().lastName())
+                  .phoneNumber(faker.phoneNumber().phoneNumber())
+                  .address(
+                      new Address(
+                          faker.address().streetAddress(),
+                          faker.address().city(),
+                          faker.address().state(),
+                          faker.address().zipCode()))
+                  .build());
+
       petRepository.save(
           Cat.builder()
-              .name(fakeCat.name())
+              .name(faker.cat().name())
               .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
-              .breed(fakeCat.breed())
-              .registry(fakeCat.registry())
+              .breed(faker.cat().breed())
+              .registry(faker.cat().registry())
               .type(PetType.CAT)
+              .owner(owner)
               .build());
 
-      net.datafaker.providers.base.Dog fakeDog = faker.dog();
       petRepository.save(
           Dog.builder()
-              .name(fakeDog.name())
+              .name(faker.dog().name())
               .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
-              .breed(fakeDog.breed())
-              .size(fakeDog.size())
-              .sound(fakeDog.sound())
-              .coatLength(fakeDog.coatLength())
+              .breed(faker.dog().breed())
+              .size(faker.dog().size())
+              .sound(faker.dog().sound())
+              .coatLength(faker.dog().coatLength())
               .type(PetType.DOG)
-              .build());
-
-      ownerRepository.save(
-          Owner.builder()
-              .firstName(faker.name().firstName())
-              .lastName(faker.name().lastName())
-              .phoneNumber(faker.phoneNumber().phoneNumber())
-              .address(
-                  new Address(
-                      faker.address().streetAddress(),
-                      faker.address().city(),
-                      faker.address().state(),
-                      faker.address().zipCode()))
+              .owner(owner)
               .build());
     };
   }

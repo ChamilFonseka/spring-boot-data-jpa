@@ -1,7 +1,10 @@
 package dev.chafon.datajpa.owner;
 
 import dev.chafon.datajpa.BaseEntity;
+import dev.chafon.datajpa.pet.Pet;
 import jakarta.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +32,9 @@ public class Owner extends BaseEntity {
   @Column(nullable = false)
   @Embedded
   private Address address;
+
+  @OneToMany(mappedBy = "owner")
+  private final Set<Pet> pets = new LinkedHashSet<>();
 
   public static Owner of(OwnerDto ownerDto) {
     return Owner.builder()

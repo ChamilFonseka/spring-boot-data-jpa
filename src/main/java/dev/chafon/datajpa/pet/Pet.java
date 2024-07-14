@@ -1,6 +1,7 @@
 package dev.chafon.datajpa.pet;
 
 import dev.chafon.datajpa.BaseEntity;
+import dev.chafon.datajpa.owner.Owner;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import lombok.*;
@@ -28,6 +29,10 @@ public abstract class Pet extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private PetType type;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(nullable = false)
+  private Owner owner;
 
   public void update(PetDto petDto) {
     this.name = petDto.name();
