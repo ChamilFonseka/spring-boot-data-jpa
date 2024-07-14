@@ -1,21 +1,22 @@
 package dev.chafon.datajpa.pet;
 
+import static dev.chafon.datajpa.TestUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.chafon.datajpa.TestContainersConfiguration;
+import dev.chafon.datajpa.TestUtil;
+import dev.chafon.datajpa.owner.Owner;
+import dev.chafon.datajpa.owner.TestOwnerRepository;
 import dev.chafon.datajpa.pet.cat.Cat;
 import dev.chafon.datajpa.pet.cat.CatView;
 import dev.chafon.datajpa.pet.dog.Dog;
 import dev.chafon.datajpa.pet.dog.DogView;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import net.datafaker.Faker;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,19 +26,27 @@ import org.springframework.test.context.TestPropertySource;
 @Import({TestContainersConfiguration.class, PetService.class})
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestPropertySource(locations = "classpath:application-test.properties")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 class PetServiceTest {
 
   @Autowired private PetService petService;
 
   @Autowired private TestPetRepository petRepository;
 
-  private Faker faker;
+  @Autowired private TestOwnerRepository ownerRepository;
+
+  private static Owner owner;
 
   @BeforeAll
   void beforeAll() {
-    faker = new Faker();
+    owner = ownerRepository.save(TestUtil.generateFakeOwner());
+  }
+
+  @AfterAll
+  void afterAll() {
+    ownerRepository.deleteById(owner.getId());
   }
 
   @AfterEach
@@ -47,8 +56,8 @@ class PetServiceTest {
 
   @Test
   void shouldReturnAllPets() {
-    Cat savedCat = petRepository.save(generateFakeCat());
-    Dog savedDog = petRepository.save(generateFakeDog());
+    Cat savedCat = petRepository.save(generateFakeCat(owner));
+    Dog savedDog = petRepository.save(generateFakeDog(owner));
 
     List<PetView> allPets = petService.getPets();
     assertThat(allPets).isNotNull();
@@ -79,7 +88,7 @@ class PetServiceTest {
 
   @Test
   void shouldReturnCatById() {
-    Cat savedCat = petRepository.save(generateFakeCat());
+    Cat savedCat = petRepository.save(generateFakeCat(owner));
 
     CatView fetchedCat = (CatView) petService.getPet(savedCat.getId());
     assertThat(fetchedCat.getId()).isEqualTo(savedCat.getId());
@@ -92,7 +101,7 @@ class PetServiceTest {
 
   @Test
   void shouldReturnDogById() {
-    Dog savedDog = petRepository.save(generateFakeDog());
+    Dog savedDog = petRepository.save(generateFakeDog(owner));
 
     DogView fetchedDog = (DogView) petService.getPet(savedDog.getId());
     assertThat(fetchedDog.getId()).isEqualTo(savedDog.getId());
@@ -115,7 +124,7 @@ class PetServiceTest {
 
   @Test
   void shouldSaveACat() {
-    PetDto catTobeSaved = generateFakeCatDto();
+    PetDto catTobeSaved = generateFakeCatDto(owner.getId());
 
     Long id = petService.createPet(catTobeSaved);
     assertThat(id).isNotNull();
@@ -133,7 +142,7 @@ class PetServiceTest {
 
   @Test
   void shouldSaveADog() {
-    PetDto dogTobeSaved = generateFakeDogDto();
+    PetDto dogTobeSaved = generateFakeDogDto(owner.getId());
 
     Long id = petService.createPet(dogTobeSaved);
     assertThat(id).isNotNull();
@@ -153,8 +162,8 @@ class PetServiceTest {
 
   @Test
   void shouldUpdateCat() {
-    Cat savedCat = petRepository.save(generateFakeCat());
-    PetDto catTobeUpdated = generateFakeCatDto();
+    Cat savedCat = petRepository.save(generateFakeCat(owner));
+    PetDto catTobeUpdated = generateFakeCatDto(owner.getId());
 
     petService.updatePet(savedCat.getId(), catTobeUpdated);
 
@@ -171,8 +180,8 @@ class PetServiceTest {
 
   @Test
   void shouldUpdateDog() {
-    Dog savedDog = petRepository.save(generateFakeDog());
-    PetDto dogTobeUpdated = generateFakeDogDto();
+    Dog savedDog = petRepository.save(generateFakeDog(owner));
+    PetDto dogTobeUpdated = generateFakeDogDto(owner.getId());
 
     petService.updatePet(savedDog.getId(), dogTobeUpdated);
 
@@ -192,7 +201,7 @@ class PetServiceTest {
   @Test
   void shouldThrowPetNotFoundExceptionOnUpdate() {
     long id = 99L;
-    PetDto petTobeUpdated = generateFakeDogDto();
+    PetDto petTobeUpdated = generateFakeDogDto(owner.getId());
     assertThatThrownBy(() -> petService.updatePet(id, petTobeUpdated))
         .isInstanceOf(PetNotFoundException.class)
         .hasMessageContaining("Pet with id " + id + " not found");
@@ -200,54 +209,13 @@ class PetServiceTest {
 
   @Test
   void shouldDeletePet() {
-    Cat savedCat = petRepository.save(generateFakeCat());
-    Dog savedDog = petRepository.save(generateFakeDog());
+    Cat savedCat = petRepository.save(generateFakeCat(owner));
+    Dog savedDog = petRepository.save(generateFakeDog(owner));
 
     petService.deletePet(savedCat.getId());
     assertThat(petRepository.findById(savedCat.getId())).isEmpty();
 
     petService.deletePet(savedDog.getId());
     assertThat(petRepository.findById(savedDog.getId())).isEmpty();
-  }
-
-  private PetDto generateFakeDogDto() {
-    net.datafaker.providers.base.Dog fakeDog = faker.dog();
-    return PetDto.aDog(
-        fakeDog.name(),
-        faker.date().birthdayLocalDate(1, 15),
-        fakeDog.breed(),
-        fakeDog.sound(),
-        fakeDog.size(),
-        fakeDog.coatLength());
-  }
-
-  private Dog generateFakeDog() {
-    net.datafaker.providers.base.Dog fakeDog = faker.dog();
-    return Dog.builder()
-        .name(fakeDog.name())
-        .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
-        .breed(fakeDog.breed())
-        .sound(fakeDog.sound())
-        .size(fakeDog.size())
-        .coatLength(fakeDog.coatLength())
-        .type(PetType.DOG)
-        .build();
-  }
-
-  private PetDto generateFakeCatDto() {
-    net.datafaker.providers.base.Cat fakeCat = faker.cat();
-    return PetDto.aCat(
-        fakeCat.name(), faker.date().birthdayLocalDate(1, 15), fakeCat.breed(), fakeCat.registry());
-  }
-
-  private Cat generateFakeCat() {
-    net.datafaker.providers.base.Cat fakeCat = faker.cat();
-    return Cat.builder()
-        .name(fakeCat.name())
-        .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
-        .breed(fakeCat.breed())
-        .registry(fakeCat.registry())
-        .type(PetType.CAT)
-        .build();
   }
 }

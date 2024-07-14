@@ -1,5 +1,6 @@
 package dev.chafon.datajpa.pet.dog;
 
+import dev.chafon.datajpa.owner.Owner;
 import dev.chafon.datajpa.pet.Pet;
 import dev.chafon.datajpa.pet.PetDto;
 import dev.chafon.datajpa.pet.PetType;
@@ -28,7 +29,7 @@ public class Dog extends Pet {
   @Column(nullable = false)
   private String coatLength;
 
-  public static Pet of(PetDto petDto) {
+  public static Pet of(PetDto petDto, Owner owner) {
     return Dog.builder()
         .name(petDto.name())
         .dateOfBirth(petDto.dateOfBirth())
@@ -37,6 +38,7 @@ public class Dog extends Pet {
         .size(petDto.size())
         .coatLength(petDto.coatLength())
         .type(PetType.DOG)
+        .owner(owner)
         .build();
   }
 

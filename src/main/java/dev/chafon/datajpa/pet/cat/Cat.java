@@ -1,5 +1,6 @@
 package dev.chafon.datajpa.pet.cat;
 
+import dev.chafon.datajpa.owner.Owner;
 import dev.chafon.datajpa.pet.Pet;
 import dev.chafon.datajpa.pet.PetDto;
 import dev.chafon.datajpa.pet.PetType;
@@ -21,13 +22,14 @@ import org.hibernate.annotations.DynamicUpdate;
 public class Cat extends Pet {
   private String registry;
 
-  public static Cat of(PetDto petDto) {
+  public static Cat of(PetDto petDto, Owner owner) {
     return Cat.builder()
         .name(petDto.name())
         .dateOfBirth(petDto.dateOfBirth())
         .breed(petDto.breed())
         .registry(petDto.registry())
         .type(PetType.CAT)
+        .owner(owner)
         .build();
   }
 

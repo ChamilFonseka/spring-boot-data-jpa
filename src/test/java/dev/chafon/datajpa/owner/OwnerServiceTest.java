@@ -1,16 +1,15 @@
 package dev.chafon.datajpa.owner;
 
+import static dev.chafon.datajpa.TestUtil.generateFakeOwner;
+import static dev.chafon.datajpa.TestUtil.generateFakeOwnerDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.chafon.datajpa.TestContainersConfiguration;
 import java.util.List;
 import java.util.Optional;
-import net.datafaker.Faker;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,20 +19,12 @@ import org.springframework.test.context.TestPropertySource;
 @Import({TestContainersConfiguration.class, OwnerService.class})
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestPropertySource(locations = "classpath:application-test.properties")
 class OwnerServiceTest {
 
   @Autowired private OwnerService ownerService;
 
   @Autowired private TestOwnerRepository ownerRepository;
-
-  private Faker faker;
-
-  @BeforeAll
-  void beforeAll() {
-    faker = new Faker();
-  }
 
   @AfterEach
   void tearDown() {
@@ -160,30 +151,6 @@ class OwnerServiceTest {
 
     ownerService.deleteOwner(owner.getId());
     Optional<Owner> optionalOwner = ownerRepository.findById(owner.getId());
-  }
-
-  private Owner generateFakeOwner() {
-    return Owner.builder()
-        .firstName(faker.name().firstName())
-        .lastName(faker.name().lastName())
-        .phoneNumber(faker.phoneNumber().phoneNumber())
-        .address(
-            new Address(
-                faker.address().streetAddress(),
-                faker.address().city(),
-                faker.address().stateAbbr(),
-                faker.address().zipCode()))
-        .build();
-  }
-
-  private OwnerDto generateFakeOwnerDto() {
-    return new OwnerDto(
-        faker.name().firstName(),
-        faker.name().lastName(),
-        faker.phoneNumber().phoneNumber(),
-        faker.address().streetAddress(),
-        faker.address().city(),
-        faker.address().stateAbbr(),
-        faker.address().zipCode());
+    assertThat(optionalOwner).isEmpty();
   }
 }
