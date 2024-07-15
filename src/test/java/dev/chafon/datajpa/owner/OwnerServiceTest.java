@@ -6,12 +6,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import dev.chafon.datajpa.TestContainersConfiguration;
 import dev.chafon.datajpa.pet.Pet;
-import dev.chafon.datajpa.pet.TestPetRepository;
+import dev.chafon.datajpa.pet.PetRepository;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -27,27 +26,23 @@ class OwnerServiceTest {
 
   @Autowired private OwnerService ownerService;
 
-  @Autowired private TestOwnerRepository ownerRepository;
+  @Autowired private OwnerRepository ownerRepository;
 
-  @Autowired private TestPetRepository petRepository;
+  @Autowired private PetRepository petRepository;
 
   @Autowired EntityManager entityManager;
-
-  @AfterEach
-  void tearDown() {
-    ownerRepository.deleteAll();
-  }
 
   @Test
   void shouldReturnAllOwners() {
     Owner owner1 = ownerRepository.save(generateFakeOwner());
-    Pet owner1Cat = petRepository.save(generateFakeCat(owner1));
-    Pet owner1Dog = petRepository.save(generateFakeDog(owner1));
+    Pet owner1Cat = petRepository.save(generateFakeCat(owner1, Set.of()));
+    Pet owner1Dog = petRepository.save(generateFakeDog(owner1, Set.of()));
 
     Owner owner2 = ownerRepository.save(generateFakeOwner());
-    Pet owner2Cat = petRepository.save(generateFakeCat(owner2));
-    Pet owner2Dog = petRepository.save(generateFakeDog(owner2));
+    Pet owner2Cat = petRepository.save(generateFakeCat(owner2, Set.of()));
+    Pet owner2Dog = petRepository.save(generateFakeDog(owner2, Set.of()));
 
+    entityManager.flush();
     entityManager.clear();
 
     List<OwnerView> allOwners = ownerService.getOwners();
@@ -125,9 +120,10 @@ class OwnerServiceTest {
   @Test
   void shouldReturnOwnerById() {
     Owner owner = ownerRepository.save(generateFakeOwner());
-    Pet cat = petRepository.save(generateFakeCat(owner));
-    Pet dog = petRepository.save(generateFakeDog(owner));
+    Pet cat = petRepository.save(generateFakeCat(owner, Set.of()));
+    Pet dog = petRepository.save(generateFakeDog(owner, Set.of()));
 
+    entityManager.flush();
     entityManager.clear();
 
     OwnerView fetchedOwner = ownerService.getOwner(owner.getId());

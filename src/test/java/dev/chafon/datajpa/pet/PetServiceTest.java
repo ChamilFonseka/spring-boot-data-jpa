@@ -7,7 +7,7 @@ import dev.chafon.datajpa.TestContainersConfiguration;
 import dev.chafon.datajpa.TestUtil;
 import dev.chafon.datajpa.owner.Owner;
 import dev.chafon.datajpa.owner.OwnerNotFoundException;
-import dev.chafon.datajpa.owner.TestOwnerRepository;
+import dev.chafon.datajpa.owner.OwnerRepository;
 import dev.chafon.datajpa.pet.cat.Cat;
 import dev.chafon.datajpa.pet.cat.CatView;
 import dev.chafon.datajpa.pet.dog.Dog;
@@ -15,6 +15,7 @@ import dev.chafon.datajpa.pet.dog.DogView;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -32,9 +33,9 @@ class PetServiceTest {
 
   @Autowired private PetService petService;
 
-  @Autowired private TestPetRepository petRepository;
+  @Autowired private PetRepository petRepository;
 
-  @Autowired private TestOwnerRepository ownerRepository;
+  @Autowired private OwnerRepository ownerRepository;
 
   private static Owner owner;
 
@@ -48,15 +49,10 @@ class PetServiceTest {
     ownerRepository.deleteById(owner.getId());
   }
 
-  @AfterEach
-  void tearDown() {
-    petRepository.deleteAll();
-  }
-
   @Test
   void shouldReturnAllPets() {
-    Cat savedCat = petRepository.save(generateFakeCat(owner));
-    Dog savedDog = petRepository.save(generateFakeDog(owner));
+    Cat savedCat = petRepository.save(generateFakeCat(owner, Set.of()));
+    Dog savedDog = petRepository.save(generateFakeDog(owner, Set.of()));
 
     List<PetView> allPets = petService.getPets();
     assertThat(allPets).isNotNull();
@@ -101,7 +97,7 @@ class PetServiceTest {
 
   @Test
   void shouldReturnCatById() {
-    Cat savedCat = petRepository.save(generateFakeCat(owner));
+    Cat savedCat = petRepository.save(generateFakeCat(owner, Set.of()));
 
     CatView fetchedCat = (CatView) petService.getPet(savedCat.getId());
     assertThat(fetchedCat.getId()).isEqualTo(savedCat.getId());
@@ -114,7 +110,7 @@ class PetServiceTest {
 
   @Test
   void shouldReturnDogById() {
-    Dog savedDog = petRepository.save(generateFakeDog(owner));
+    Dog savedDog = petRepository.save(generateFakeDog(owner, Set.of()));
 
     DogView fetchedDog = (DogView) petService.getPet(savedDog.getId());
     assertThat(fetchedDog.getId()).isEqualTo(savedDog.getId());
@@ -184,7 +180,7 @@ class PetServiceTest {
 
   @Test
   void shouldUpdateCat() {
-    Cat savedCat = petRepository.save(generateFakeCat(owner));
+    Cat savedCat = petRepository.save(generateFakeCat(owner, Set.of()));
     PetDto catTobeUpdated = generateFakeCatDto(owner.getId());
 
     petService.updatePet(savedCat.getId(), catTobeUpdated);
@@ -202,7 +198,7 @@ class PetServiceTest {
 
   @Test
   void shouldUpdateDog() {
-    Dog savedDog = petRepository.save(generateFakeDog(owner));
+    Dog savedDog = petRepository.save(generateFakeDog(owner, Set.of()));
     PetDto dogTobeUpdated = generateFakeDogDto(owner.getId());
 
     petService.updatePet(savedDog.getId(), dogTobeUpdated);
@@ -231,8 +227,8 @@ class PetServiceTest {
 
   @Test
   void shouldDeletePet() {
-    Cat savedCat = petRepository.save(generateFakeCat(owner));
-    Dog savedDog = petRepository.save(generateFakeDog(owner));
+    Cat savedCat = petRepository.save(generateFakeCat(owner, Set.of()));
+    Dog savedDog = petRepository.save(generateFakeDog(owner, Set.of()));
 
     petService.deletePet(savedCat.getId());
     assertThat(petRepository.findById(savedCat.getId())).isEmpty();

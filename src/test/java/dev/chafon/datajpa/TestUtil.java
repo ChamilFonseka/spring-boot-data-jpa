@@ -7,6 +7,9 @@ import dev.chafon.datajpa.pet.PetDto;
 import dev.chafon.datajpa.pet.PetType;
 import dev.chafon.datajpa.pet.cat.Cat;
 import dev.chafon.datajpa.pet.dog.Dog;
+import dev.chafon.datajpa.vet.Vet;
+import dev.chafon.datajpa.vet.VetDto;
+import java.util.HashSet;
 import java.util.Set;
 import net.datafaker.Faker;
 
@@ -39,7 +42,7 @@ public class TestUtil {
         faker.address().zipCode());
   }
 
-  public static Dog generateFakeDog(Owner owner) {
+  public static Dog generateFakeDog(Owner owner, Set<Vet> vets) {
     return Dog.builder()
         .name(faker.dog().name())
         .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
@@ -49,6 +52,7 @@ public class TestUtil {
         .coatLength(faker.dog().coatLength())
         .type(PetType.DOG)
         .owner(owner)
+        .vets(new HashSet<>(vets))
         .build();
   }
 
@@ -64,7 +68,7 @@ public class TestUtil {
         Set.of());
   }
 
-  public static Cat generateFakeCat(Owner owner) {
+  public static Cat generateFakeCat(Owner owner, Set<Vet> vets) {
     return Cat.builder()
         .name(faker.cat().name())
         .dateOfBirth(faker.date().birthdayLocalDate(1, 15))
@@ -72,6 +76,7 @@ public class TestUtil {
         .registry(faker.cat().registry())
         .type(PetType.CAT)
         .owner(owner)
+        .vets(new HashSet<>(vets))
         .build();
   }
 
@@ -83,5 +88,18 @@ public class TestUtil {
         faker.cat().registry(),
         ownerId,
         Set.of());
+  }
+
+  public static Vet generateFakeVet() {
+    return Vet.builder()
+        .firstName(faker.name().firstName())
+        .lastName(faker.name().lastName())
+        .phoneNumber(faker.phoneNumber().phoneNumber())
+        .build();
+  }
+
+  public static VetDto generateFakeVetDto() {
+    return new VetDto(
+        faker.name().firstName(), faker.name().lastName(), faker.phoneNumber().phoneNumber());
   }
 }

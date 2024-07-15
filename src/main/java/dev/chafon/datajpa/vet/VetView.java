@@ -4,6 +4,8 @@ import dev.chafon.datajpa.pet.PetType;
 import java.util.Set;
 
 public interface VetView {
+  Long getId();
+
   String getFirstName();
 
   String getLastName();
