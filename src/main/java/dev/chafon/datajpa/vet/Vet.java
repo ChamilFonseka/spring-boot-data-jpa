@@ -22,44 +22,44 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "vets")
 @DynamicUpdate
 public class Vet extends BaseEntity {
-  @Column(nullable = false)
-  private String firstName;
+    @Column(nullable = false)
+    private String firstName;
 
-  @Column(nullable = false)
-  private String lastName;
+    @Column(nullable = false)
+    private String lastName;
 
-  @Column(nullable = false)
-  private String phoneNumber;
+    @Column(nullable = false)
+    private String phoneNumber;
 
-  @ManyToMany(mappedBy = "vets")
-  private final Set<Pet> pets = new LinkedHashSet<>();
+    @ManyToMany(mappedBy = "vets")
+    private final Set<Pet> pets = new LinkedHashSet<>();
 
-  public static Vet of(VetDto vetDto) {
-    return Vet.builder()
-        .firstName(vetDto.firstName())
-        .lastName(vetDto.lastName())
-        .phoneNumber(vetDto.phoneNumber())
-        .build();
-  }
+    public static Vet of(VetDto vetDto) {
+        return Vet.builder()
+                .firstName(vetDto.firstName())
+                .lastName(vetDto.lastName())
+                .phoneNumber(vetDto.phoneNumber())
+                .build();
+    }
 
-  public void update(VetDto vetDto) {
-    this.firstName = vetDto.firstName();
-    this.lastName = vetDto.lastName();
-    this.phoneNumber = vetDto.phoneNumber();
-  }
+    public void update(VetDto vetDto) {
+        this.firstName = vetDto.firstName();
+        this.lastName = vetDto.lastName();
+        this.phoneNumber = vetDto.phoneNumber();
+    }
 
-  @Override
-  public String toString() {
-    return "Vet{"
-        + "firstName='"
-        + firstName
-        + '\''
-        + ", lastName='"
-        + lastName
-        + '\''
-        + ", phoneNumber='"
-        + phoneNumber
-        + '\''
-        + '}';
-  }
+    @Override
+    public String toString() {
+        return "Vet{"
+                + "firstName='"
+                + firstName
+                + '\''
+                + ", lastName='"
+                + lastName
+                + '\''
+                + ", phoneNumber='"
+                + phoneNumber
+                + '\''
+                + '}';
+    }
 }

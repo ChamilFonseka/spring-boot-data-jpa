@@ -4,21 +4,21 @@ import dev.chafon.datajpa.pet.PetType;
 import java.util.Set;
 
 public interface VetView {
-  Long getId();
+    Long getId();
 
-  String getFirstName();
+    String getFirstName();
 
-  String getLastName();
+    String getLastName();
 
-  String getPhoneNumber();
+    String getPhoneNumber();
 
-  Set<PetView> getPets();
+    Set<PetView> getPets();
 
-  interface PetView {
-    String getName();
+    interface PetView {
+        String getName();
 
-    String getBreed();
+        String getBreed();
 
-    PetType getType();
-  }
+        PetType getType();
+    }
 }

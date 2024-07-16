@@ -13,44 +13,46 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequiredArgsConstructor
 public class PetController {
 
-  private final PetService petService;
+    private final PetService petService;
 
-  @GetMapping
-  List<PetView> getPets() {
-    return petService.getPets();
-  }
+    @GetMapping
+    List<PetView> getPets() {
+        return petService.getPets();
+    }
 
-  @GetMapping("/{id}")
-  PetView getPet(@PathVariable Long id) {
-    return petService.getPet(id);
-  }
+    @GetMapping("/{id}")
+    PetView getPet(@PathVariable Long id) {
+        return petService.getPet(id);
+    }
 
-  @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  ResponseEntity<Void> createPet(@RequestBody PetDto petDto) {
-    Long id = petService.createPet(petDto);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    ResponseEntity<Void> createPet(@RequestBody PetDto petDto) {
+        Long id = petService.createPet(petDto);
 
-    URI location =
-        ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(id)
+                .toUri();
 
-    return ResponseEntity.created(location).build();
-  }
+        return ResponseEntity.created(location).build();
+    }
 
-  @PutMapping("/{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  void updatePet(@PathVariable Long id, @RequestBody PetDto petDto) {
-    petService.updatePet(id, petDto);
-  }
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void updatePet(@PathVariable Long id, @RequestBody PetDto petDto) {
+        petService.updatePet(id, petDto);
+    }
 
-  @DeleteMapping("/{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  void deletePet(@PathVariable Long id) {
-    petService.deletePet(id);
-  }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deletePet(@PathVariable Long id) {
+        petService.deletePet(id);
+    }
 
-  @ExceptionHandler(PetNotFoundException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public String handlePetNotFoundException(PetNotFoundException e) {
-    return e.getMessage();
-  }
+    @ExceptionHandler(PetNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handlePetNotFoundException(PetNotFoundException e) {
+        return e.getMessage();
+    }
 }

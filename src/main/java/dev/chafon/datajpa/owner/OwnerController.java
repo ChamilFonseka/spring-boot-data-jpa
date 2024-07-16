@@ -13,44 +13,46 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequiredArgsConstructor
 public class OwnerController {
 
-  private final OwnerService ownerService;
+    private final OwnerService ownerService;
 
-  @GetMapping
-  public List<OwnerView> getOwners() {
-    return ownerService.getOwners();
-  }
+    @GetMapping
+    public List<OwnerView> getOwners() {
+        return ownerService.getOwners();
+    }
 
-  @GetMapping("/{id}")
-  public OwnerView getOwner(@PathVariable Long id) {
-    return ownerService.getOwner(id);
-  }
+    @GetMapping("/{id}")
+    public OwnerView getOwner(@PathVariable Long id) {
+        return ownerService.getOwner(id);
+    }
 
-  @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<Void> createOwner(@RequestBody OwnerDto ownerDto) {
-    Long id = ownerService.createOwner(ownerDto);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Void> createOwner(@RequestBody OwnerDto ownerDto) {
+        Long id = ownerService.createOwner(ownerDto);
 
-    URI location =
-        ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(id)
+                .toUri();
 
-    return ResponseEntity.created(location).build();
-  }
+        return ResponseEntity.created(location).build();
+    }
 
-  @PutMapping("/{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void updateOwner(@PathVariable Long id, @RequestBody OwnerDto ownerDto) {
-    ownerService.updateOwner(id, ownerDto);
-  }
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateOwner(@PathVariable Long id, @RequestBody OwnerDto ownerDto) {
+        ownerService.updateOwner(id, ownerDto);
+    }
 
-  @DeleteMapping("/{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteOwner(@PathVariable Long id) {
-    ownerService.deleteOwner(id);
-  }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOwner(@PathVariable Long id) {
+        ownerService.deleteOwner(id);
+    }
 
-  @ExceptionHandler(OwnerNotFoundException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public String handleOwnerNotFoundException(OwnerNotFoundException e) {
-    return e.getMessage();
-  }
+    @ExceptionHandler(OwnerNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleOwnerNotFoundException(OwnerNotFoundException e) {
+        return e.getMessage();
+    }
 }

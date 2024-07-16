@@ -12,11 +12,12 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @SpringBootTest
 class SpringBootDataJpaApplicationTests {
 
-  @Autowired private PostgreSQLContainer<?> postgreSQLContainer;
+    @Autowired
+    private PostgreSQLContainer<?> postgreSQLContainer;
 
-  @Test
-  void contextLoads() {
-    assertThat(postgreSQLContainer.isCreated()).isTrue();
-    assertThat((postgreSQLContainer.isRunning())).isTrue();
-  }
+    @Test
+    void contextLoads() {
+        assertThat(postgreSQLContainer.isCreated()).isTrue();
+        assertThat((postgreSQLContainer.isRunning())).isTrue();
+    }
 }

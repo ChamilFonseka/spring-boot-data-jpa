@@ -20,86 +20,70 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PetService {
 
-  private final PetRepository petRepository;
-  private final CatRepository catRepository;
-  private final DogRepository dogRepository;
-  private final OwnerRepository ownerRepository;
-  private final VetRepository vetRepository;
+    private final PetRepository petRepository;
+    private final CatRepository catRepository;
+    private final DogRepository dogRepository;
+    private final OwnerRepository ownerRepository;
+    private final VetRepository vetRepository;
 
-  public List<PetView> getPets() {
-    return petRepository.findPetViewBy();
-  }
-
-  public PetView getPet(Long id) {
-    PetView petView =
-        petRepository.findPetViewById(id).orElseThrow(() -> new PetNotFoundException(id));
-
-    if (petView.getType().equals(PetType.CAT)) {
-      return catRepository.findCatViewById(id);
-    } else {
-      return dogRepository.findDogViewById(id);
+    public List<PetView> getPets() {
+        return petRepository.findPetViewBy();
     }
-  }
 
-  public Long createPet(PetDto petDto) {
-    Owner owner =
-        ownerRepository
-            .findById(petDto.ownerId())
-            .orElseThrow(() -> new OwnerNotFoundException(petDto.ownerId()));
+    public PetView getPet(Long id) {
+        PetView petView = petRepository.findPetViewById(id).orElseThrow(() -> new PetNotFoundException(id));
 
-    Set<Vet> vets = new HashSet<>();
-    ;
-    if (petDto.vetIds() != null) {
-      petDto
-          .vetIds()
-          .forEach(
-              vetId -> {
-                Vet vet =
-                    vetRepository
-                        .findById(vetId)
-                        .orElseThrow(() -> new VetNotFoundException(vetId));
+        if (petView.getType().equals(PetType.CAT)) {
+            return catRepository.findCatViewById(id);
+        } else {
+            return dogRepository.findDogViewById(id);
+        }
+    }
+
+    public Long createPet(PetDto petDto) {
+        Owner owner = ownerRepository
+                .findById(petDto.ownerId())
+                .orElseThrow(() -> new OwnerNotFoundException(petDto.ownerId()));
+
+        Set<Vet> vets = new HashSet<>();
+        if (petDto.vetIds() != null) {
+            petDto.vetIds().forEach(vetId -> {
+                Vet vet = vetRepository.findById(vetId).orElseThrow(() -> new VetNotFoundException(vetId));
                 vets.add(vet);
-              });
+            });
+        }
+
+        Pet petToBeSaved;
+        if (petDto.type().equals(PetType.CAT)) {
+            petToBeSaved = Cat.of(petDto, owner, vets);
+        } else {
+            petToBeSaved = Dog.of(petDto, owner, vets);
+        }
+        return petRepository.save(petToBeSaved).getId();
     }
 
-    Pet petToBeSaved;
-    if (petDto.type().equals(PetType.CAT)) {
-      petToBeSaved = Cat.of(petDto, owner, vets);
-    } else {
-      petToBeSaved = Dog.of(petDto, owner, vets);
-    }
-    return petRepository.save(petToBeSaved).getId();
-  }
+    public void updatePet(Long id, PetDto petDto) {
+        Pet pet = petRepository.findById(id).orElseThrow(() -> new PetNotFoundException(id));
+        Owner owner = ownerRepository
+                .findById(petDto.ownerId())
+                .orElseThrow(() -> new OwnerNotFoundException(petDto.ownerId()));
 
-  public void updatePet(Long id, PetDto petDto) {
-    Pet pet = petRepository.findById(id).orElseThrow(() -> new PetNotFoundException(id));
-    Owner owner =
-        ownerRepository
-            .findById(petDto.ownerId())
-            .orElseThrow(() -> new OwnerNotFoundException(petDto.ownerId()));
-
-    Set<Vet> vets;
-    if (petDto.vetIds() != null) {
-      vets = new HashSet<>();
-      petDto
-          .vetIds()
-          .forEach(
-              vetId -> {
-                Vet vet =
-                    vetRepository
-                        .findById(vetId)
-                        .orElseThrow(() -> new VetNotFoundException(vetId));
+        Set<Vet> vets;
+        if (petDto.vetIds() != null) {
+            vets = new HashSet<>();
+            petDto.vetIds().forEach(vetId -> {
+                Vet vet = vetRepository.findById(vetId).orElseThrow(() -> new VetNotFoundException(vetId));
                 vets.add(vet);
-              });
-    } else {
-      vets = pet.getVets();
+            });
+        } else {
+            vets = pet.getVets();
+        }
+
+        pet.update(petDto, owner, vets);
+        petRepository.save(pet);
     }
 
-    pet.update(petDto, owner, vets);
-    petRepository.save(pet);
-  }
-
-  public void deletePet(Long id) {
-    petRepository.deleteById(id);
-  }
+    public void deletePet(Long id) {
+        petRepository.deleteById(id);
+    }
 }

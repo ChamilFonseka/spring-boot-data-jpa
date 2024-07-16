@@ -21,34 +21,34 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "dogs")
 @DynamicUpdate
 public class Dog extends Pet {
-  @Column(nullable = false)
-  private String sound;
+    @Column(nullable = false)
+    private String sound;
 
-  @Column(nullable = false)
-  private String size;
+    @Column(nullable = false)
+    private String size;
 
-  @Column(nullable = false)
-  private String coatLength;
+    @Column(nullable = false)
+    private String coatLength;
 
-  public static Pet of(PetDto petDto, Owner owner, Set<Vet> vets) {
-    return Dog.builder()
-        .name(petDto.name())
-        .dateOfBirth(petDto.dateOfBirth())
-        .breed(petDto.breed())
-        .sound(petDto.sound())
-        .size(petDto.size())
-        .coatLength(petDto.coatLength())
-        .type(PetType.DOG)
-        .owner(owner)
-        .vets(vets)
-        .build();
-  }
+    public static Pet of(PetDto petDto, Owner owner, Set<Vet> vets) {
+        return Dog.builder()
+                .name(petDto.name())
+                .dateOfBirth(petDto.dateOfBirth())
+                .breed(petDto.breed())
+                .sound(petDto.sound())
+                .size(petDto.size())
+                .coatLength(petDto.coatLength())
+                .type(PetType.DOG)
+                .owner(owner)
+                .vets(vets)
+                .build();
+    }
 
-  @Override
-  public void update(PetDto petDto, Owner owner, Set<Vet> vets) {
-    super.update(petDto, owner, vets);
-    this.sound = petDto.sound();
-    this.size = petDto.size();
-    this.coatLength = petDto.coatLength();
-  }
+    @Override
+    public void update(PetDto petDto, Owner owner, Set<Vet> vets) {
+        super.update(petDto, owner, vets);
+        this.sound = petDto.sound();
+        this.size = petDto.size();
+        this.coatLength = petDto.coatLength();
+    }
 }

@@ -6,9 +6,9 @@ import org.springframework.data.repository.Repository;
 
 @NoRepositoryBean
 public interface BaseRepository<T, ID> extends Repository<T, ID> {
-  Optional<T> findById(ID id);
+    Optional<T> findById(ID id);
 
-  <S extends T> S save(T t);
+    <S extends T> S save(T t);
 
-  void deleteById(ID id);
+    void deleteById(ID id);
 }

@@ -40,8 +40,8 @@ tasks.named('test') {
 spotless {
 	java {
 		importOrder()
-		removeUnusedImports('cleanthat-javaparser-unnecessaryimport')
-		googleJavaFormat()
+		removeUnusedImports()
+		palantirJavaFormat('2.35.0')
 		formatAnnotations()
 	}
 }

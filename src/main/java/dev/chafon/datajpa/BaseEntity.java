@@ -19,30 +19,31 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity implements Serializable {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @CreatedDate
-  @Column(nullable = false, updatable = false)
-  private Instant createdDate;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private Instant createdDate;
 
-  @LastModifiedDate
-  @Column(insertable = false)
-  private Instant lastModifiedDate;
+    @LastModifiedDate
+    @Column(insertable = false)
+    private Instant lastModifiedDate;
 
-  @Version private Long version;
+    @Version
+    private Long version;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    BaseEntity that = (BaseEntity) o;
-    return Objects.equals(id, that.id);
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseEntity that = (BaseEntity) o;
+        return Objects.equals(id, that.id);
+    }
 
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(id);
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

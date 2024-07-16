@@ -22,23 +22,23 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "cats")
 @DynamicUpdate
 public class Cat extends Pet {
-  private String registry;
+    private String registry;
 
-  public static Cat of(PetDto petDto, Owner owner, Set<Vet> vets) {
-    return Cat.builder()
-        .name(petDto.name())
-        .dateOfBirth(petDto.dateOfBirth())
-        .breed(petDto.breed())
-        .registry(petDto.registry())
-        .type(PetType.CAT)
-        .owner(owner)
-        .vets(vets)
-        .build();
-  }
+    public static Cat of(PetDto petDto, Owner owner, Set<Vet> vets) {
+        return Cat.builder()
+                .name(petDto.name())
+                .dateOfBirth(petDto.dateOfBirth())
+                .breed(petDto.breed())
+                .registry(petDto.registry())
+                .type(PetType.CAT)
+                .owner(owner)
+                .vets(vets)
+                .build();
+    }
 
-  @Override
-  public void update(PetDto petDto, Owner owner, Set<Vet> vets) {
-    super.update(petDto, owner, vets);
-    this.registry = petDto.registry();
-  }
+    @Override
+    public void update(PetDto petDto, Owner owner, Set<Vet> vets) {
+        super.update(petDto, owner, vets);
+        this.registry = petDto.registry();
+    }
 }
