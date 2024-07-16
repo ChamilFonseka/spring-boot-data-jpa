@@ -15,9 +15,11 @@ import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PetService {
 
     private final PetRepository petRepository;
@@ -40,6 +42,7 @@ public class PetService {
         }
     }
 
+    @Transactional
     public Long createPet(PetDto petDto) {
         Owner owner = ownerRepository
                 .findById(petDto.ownerId())
@@ -62,6 +65,7 @@ public class PetService {
         return petRepository.save(petToBeSaved).getId();
     }
 
+    @Transactional
     public void updatePet(Long id, PetDto petDto) {
         Pet pet = petRepository.findById(id).orElseThrow(() -> new PetNotFoundException(id));
         Owner owner = ownerRepository
@@ -83,6 +87,7 @@ public class PetService {
         petRepository.save(pet);
     }
 
+    @Transactional
     public void deletePet(Long id) {
         petRepository.deleteById(id);
     }
